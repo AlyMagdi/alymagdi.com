@@ -4,17 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cross-Enterprise IDOR — Wallet Address Disclosure - Rony</title>
-    <meta name="description" content="How a naming inconsistency in JSON-RPC methods exposed wallet addresses across enterprise boundaries on a crypto custody platform.">
+    <title>Missing 2FA on KYC Identity Changes - Rony</title>
+    <meta name="description" content="How a missing two-factor authentication check on identity verification changes allowed attackers to hijack accounts on a crypto exchange.">
     <meta name="theme-color" content="#0f0f0f">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
-    <link rel="icon" href="image/upside_bar_icon.png" type="image/png">
+    <link rel="icon" href="../image/upside_bar_icon.png" type="image/png">
     <script>(function(){var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);if(window.top===window.self)document.documentElement.style.setProperty('display','block','important');})();</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="../shared.css">
     <style>
         .post-hero {
             padding: 120px 0 40px;
@@ -46,9 +46,9 @@
             letter-spacing: 0.5px;
         }
 
-        .tag-critical {
-            background-color: rgba(220, 38, 38, 0.15);
-            color: #ef4444;
+        .tag-medium {
+            background-color: rgba(234, 179, 8, 0.15);
+            color: #eab308;
         }
 
         .post-hero h1 {
@@ -195,7 +195,7 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background-color: #ef4444;
+            background-color: #eab308;
         }
     </style>
 </head>
@@ -204,8 +204,8 @@
     <!-- Navigation -->
     <nav>
         <div class="container nav-container">
-            <a href="./index.html" class="logo">
-                <img src="image/upside_bar_icon.png" alt="Rony's Logo">
+            <a href="../" class="logo">
+                <img src="../image/upside_bar_icon.png" alt="Rony's Logo">
             </a>
 
             <div class="menu-toggle" aria-label="Menu" role="button" tabindex="0">
@@ -215,9 +215,9 @@
             </div>
 
             <div class="nav-items">
-                <a href="./about.html" class="nav-link">About</a>
-                <a href="./blog.html" class="nav-link">Blog</a>
-                <a href="./work.html" class="nav-link">Work</a>
+                <a href="../about/" class="nav-link">About</a>
+                <a href="../blog/" class="nav-link">Blog</a>
+                <a href="../work/" class="nav-link">Work</a>
 
                 <button class="theme-toggle" aria-label="Toggle theme">
                     <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
@@ -243,10 +243,10 @@
                 <div class="section" style="position: relative; z-index: 1;">
                     <div class="post-meta">
                         <span class="post-date">March 2026</span>
-                        <span class="severity-tag tag-critical">Critical</span>
+                        <span class="severity-tag tag-medium">Medium</span>
                     </div>
-                    <h1 class="animate-on-load">Cross-Enterprise IDOR — Wallet Address Disclosure via API Inconsistency</h1>
-                    <p class="subtitle animate-on-load">How a naming inconsistency between two API methods broke tenant isolation on a crypto custody platform, exposing enterprise wallet addresses.</p>
+                    <h1 class="animate-on-load">Missing 2FA on KYC Identity Changes</h1>
+                    <p class="subtitle animate-on-load">How a crypto exchange allowed users to change their verified identity documents without requiring two-factor authentication.</p>
                 </div>
             </div>
         </section>
@@ -255,54 +255,52 @@
             <div class="container">
 
                 <h2>The Target</h2>
-                <p>A digital asset custody platform that manages cryptocurrency wallets for institutional clients — banks, funds, and enterprises. Each enterprise has its own isolated tenant with separate wallets, keys, and transaction history. The platform uses a JSON-RPC API for all wallet operations.</p>
+                <p>A cryptocurrency exchange that requires KYC (Know Your Customer) verification before users can trade or withdraw funds. Users must submit government-issued ID documents and complete facial verification during onboarding.</p>
 
-                <h2>The Discovery</h2>
-                <p>While exploring the API documentation, I noticed that the platform exposed two related methods for querying wallet information:</p>
-                <pre><code>Method A: wallet.getAddress     → requires wallet_id
-Method B: wallet.getAddresses   → requires account_id</code></pre>
-                <p>Both methods returned wallet addresses, but there was a subtle difference. <strong>Method A</strong> (singular) properly validated that the requested <code>wallet_id</code> belonged to the authenticated enterprise. <strong>Method B</strong> (plural) only validated the <code>account_id</code> parameter — and account IDs followed a predictable sequential pattern.</p>
+                <h2>What Is KYC?</h2>
+                <p>KYC is the identity verification process that financial platforms use to comply with anti-money laundering (AML) regulations. Once a user is verified, their identity is tied to their account — it's the foundation of trust between the platform and the user.</p>
 
-                <h2>The Exploit</h2>
+                <h2>The Vulnerability</h2>
+                <p>While testing the account settings, I found that the platform allowed users to re-submit their KYC documents — essentially changing the verified identity attached to the account. This is sometimes legitimate (name changes, expired documents), but the critical issue was how the platform handled the authorization.</p>
 
                 <div class="chain-step">
                     <span class="step-num">1</span>
-                    <p><strong>Observe the Pattern:</strong> I checked my own enterprise's account ID and noticed it was a simple incrementing integer. My account was something like <code>10042</code>. This suggested there were at least 10,000+ accounts on the platform.</p>
+                    <p><strong>No 2FA Required:</strong> Changing the KYC identity — the most sensitive operation on a financial platform — did not require two-factor authentication. If an attacker gained access to a user's session (through session hijacking, XSS, or credential stuffing), they could immediately change the account's identity.</p>
                 </div>
 
                 <div class="chain-step">
                     <span class="step-num">2</span>
-                    <p><strong>Test Cross-Tenant Access:</strong> I called <code>wallet.getAddresses</code> with a different account ID — one that didn't belong to my enterprise. The API returned a full list of wallet addresses for that foreign account, including blockchain addresses across multiple chains (BTC, ETH, etc.).</p>
+                    <p><strong>No Email Confirmation:</strong> The identity change didn't trigger an email notification to the account owner. The legitimate user would have no idea their identity documents had been replaced.</p>
                 </div>
 
                 <div class="chain-step">
                     <span class="step-num">3</span>
-                    <p><strong>Confirm the Scope:</strong> I tested with several different account IDs. Every single one returned wallet data. The authorization check was completely missing on this specific method — any authenticated user from any enterprise could enumerate wallet addresses belonging to any other enterprise on the platform.</p>
+                    <p><strong>Immediate Effect:</strong> Once the new documents were submitted, the account was immediately updated. There was no cooling-off period, no manual review queue, and no restriction on withdrawals during the identity change process.</p>
                 </div>
 
                 <div class="chain-step">
                     <span class="step-num">4</span>
-                    <p><strong>Root Cause:</strong> The singular method (<code>getAddress</code>) had proper tenant isolation because it resolved ownership through the wallet object. The plural method (<code>getAddresses</code>) was likely added later and the developer forgot to add the enterprise-level authorization check, only validating that the account ID existed — not that it belonged to the caller's tenant.</p>
+                    <p><strong>Attack Scenario:</strong> An attacker compromises a session → changes the KYC to their own identity → platform now considers the attacker the "verified owner" → attacker can change password, disable 2FA, and drain the wallet.</p>
                 </div>
 
                 <h2>Impact</h2>
                 <ul class="impact-list">
-                    <li>Full disclosure of wallet addresses for every enterprise client on the platform</li>
-                    <li>Blockchain transaction tracking — knowing wallet addresses allows monitoring all transactions</li>
-                    <li>Holdings enumeration — balances of institutional wallets become visible on-chain</li>
-                    <li>Targeted attacks — leaked addresses enable phishing, dusting attacks, or social engineering</li>
-                    <li>Regulatory and compliance violations — custody platforms must guarantee data isolation</li>
+                    <li>Full account takeover by changing the verified identity</li>
+                    <li>Attacker becomes the "legitimate" owner in the platform's eyes</li>
+                    <li>Enables password reset, 2FA removal, and fund withdrawal</li>
+                    <li>No notification to the real account owner</li>
+                    <li>Regulatory compliance risk — KYC integrity is a legal requirement</li>
                 </ul>
 
                 <h2>Timeline</h2>
-                <p>Reported immediately. The platform's security team added the missing enterprise-level authorization check within 48 hours and conducted an audit of all similar API methods.</p>
+                <p>Reported with a clear attack scenario. The team added mandatory 2FA verification and email confirmation for any KYC document changes. They also implemented a 24-hour withdrawal lock after identity changes.</p>
 
                 <div class="moral-box">
                     <h3>Takeaway</h3>
-                    <p>When an API has two methods that do similar things, test both. Developers often implement proper authorization on the first method but forget it on the variant. Look for singular vs. plural endpoints, v1 vs. v2, and "get" vs. "list" — these inconsistencies are where IDOR vulnerabilities hide. In multi-tenant systems, always test if you can access resources belonging to other tenants by manipulating IDs.</p>
+                    <p>Always check if the most sensitive actions on a platform require step-up authentication (2FA, re-entering password, email confirmation). On financial platforms, the most critical flows are: identity changes, withdrawal address changes, 2FA disable/change, and password reset. If any of these can be done with just a session cookie, that's a finding. Think like an attacker who already has a stolen session — what's the worst they can do?</p>
                 </div>
 
-                <a href="./blog.html" class="back-button">&larr; Back to Blog</a>
+                <a href="../blog/" class="back-button">&larr; Back to Blog</a>
 
             </div>
         </section>
@@ -313,10 +311,10 @@ Method B: wallet.getAddresses   → requires account_id</code></pre>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-nav">
-                    <a href="./index.html" class="footer-link">Home</a>
-                    <a href="./about.html" class="footer-link">About</a>
-                    <a href="./blog.html" class="footer-link">Blog</a>
-                    <a href="./work.html" class="footer-link">Work</a>
+                    <a href="../" class="footer-link">Home</a>
+                    <a href="../about/" class="footer-link">About</a>
+                    <a href="../blog/" class="footer-link">Blog</a>
+                    <a href="../work/" class="footer-link">Work</a>
                 </div>
                 <div class="footer-social">
                     <a href="https://github.com/AlyMagdi" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="GitHub">
@@ -344,7 +342,7 @@ Method B: wallet.getAddresses   → requires account_id</code></pre>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
     </button>
 
-    <script src="shared.js"></script>
+    <script src="../shared.js"></script>
 </body>
 
 </html>

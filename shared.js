@@ -76,14 +76,16 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('scroll', checkVisibility);
 
     // --- Active Nav Link Highlighter ---
-    var currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    var path = window.location.pathname.replace(/\/index\.html$/, '/');
+    var pathParts = path.split('/').filter(Boolean);
+    var currentFolder = pathParts.length > 0 ? pathParts[pathParts.length - 1] : '';
     var navLinks = document.querySelectorAll('.nav-link');
 
     navLinks.forEach(function (link) {
-        var linkPage = link.getAttribute('href').replace('./', '');
-        if (linkPage === currentPage ||
-            (currentPage === '' && linkPage === 'index.html') ||
-            (currentPage === 'index.html' && linkPage === '')) {
+        var href = link.getAttribute('href');
+        var linkFolder = href.replace(/^\.\.?\//, '').replace(/\/$/, '');
+        if (linkFolder === currentFolder ||
+            (currentFolder === '' && (linkFolder === '' || linkFolder === 'index.html'))) {
             link.classList.add('active');
         }
     });

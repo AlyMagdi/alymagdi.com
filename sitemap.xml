@@ -5,35 +5,35 @@
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>https://alymagdi.com/about.html</loc>
+        <loc>https://alymagdi.com/about/</loc>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://alymagdi.com/blog.html</loc>
+        <loc>https://alymagdi.com/blog/</loc>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://alymagdi.com/work.html</loc>
+        <loc>https://alymagdi.com/work/</loc>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://alymagdi.com/blog-ssrf-to-rce.html</loc>
+        <loc>https://alymagdi.com/blog-ssrf-to-rce/</loc>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://alymagdi.com/blog-dependency-confusion.html</loc>
+        <loc>https://alymagdi.com/blog-dependency-confusion/</loc>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://alymagdi.com/blog-cross-enterprise-idor.html</loc>
+        <loc>https://alymagdi.com/blog-cross-enterprise-idor/</loc>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://alymagdi.com/blog-missing-2fa-kyc.html</loc>
+        <loc>https://alymagdi.com/blog-missing-2fa-kyc/</loc>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://alymagdi.com/blog-cross-tenant-enumeration.html</loc>
+        <loc>https://alymagdi.com/blog-cross-tenant-enumeration/</loc>
         <priority>0.7</priority>
     </url>
 </urlset>

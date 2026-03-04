@@ -4,17 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dependency Confusion — RCE via Package Hijacking - Rony</title>
-    <meta name="description" content="How a dependency confusion attack on a major gaming platform's npm packages led to remote code execution on internal build systems.">
+    <title>SSRF to RCE — Container Escape on a CI/CD Platform - Rony</title>
+    <meta name="description" content="How a blind SSRF escalated to full remote code execution, container escape, and potential supply chain compromise on a major CI/CD platform.">
     <meta name="theme-color" content="#0f0f0f">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
-    <link rel="icon" href="image/upside_bar_icon.png" type="image/png">
+    <link rel="icon" href="../image/upside_bar_icon.png" type="image/png">
     <script>(function(){var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);if(window.top===window.self)document.documentElement.style.setProperty('display','block','important');})();</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="../shared.css">
     <style>
         .post-hero {
             padding: 120px 0 40px;
@@ -46,9 +46,9 @@
             letter-spacing: 0.5px;
         }
 
-        .tag-high {
-            background-color: rgba(255, 85, 0, 0.15);
-            color: #ff5500;
+        .tag-critical {
+            background-color: rgba(220, 38, 38, 0.15);
+            color: #ef4444;
         }
 
         .post-hero h1 {
@@ -195,7 +195,7 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background-color: #ff5500;
+            background-color: #ef4444;
         }
     </style>
 </head>
@@ -204,8 +204,8 @@
     <!-- Navigation -->
     <nav>
         <div class="container nav-container">
-            <a href="./index.html" class="logo">
-                <img src="image/upside_bar_icon.png" alt="Rony's Logo">
+            <a href="../" class="logo">
+                <img src="../image/upside_bar_icon.png" alt="Rony's Logo">
             </a>
 
             <div class="menu-toggle" aria-label="Menu" role="button" tabindex="0">
@@ -215,9 +215,9 @@
             </div>
 
             <div class="nav-items">
-                <a href="./about.html" class="nav-link">About</a>
-                <a href="./blog.html" class="nav-link">Blog</a>
-                <a href="./work.html" class="nav-link">Work</a>
+                <a href="../about/" class="nav-link">About</a>
+                <a href="../blog/" class="nav-link">Blog</a>
+                <a href="../work/" class="nav-link">Work</a>
 
                 <button class="theme-toggle" aria-label="Toggle theme">
                     <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
@@ -243,10 +243,10 @@
                 <div class="section" style="position: relative; z-index: 1;">
                     <div class="post-meta">
                         <span class="post-date">March 2026</span>
-                        <span class="severity-tag tag-high">High</span>
+                        <span class="severity-tag tag-critical">Critical</span>
                     </div>
-                    <h1 class="animate-on-load">Dependency Confusion — RCE via Package Hijacking</h1>
-                    <p class="subtitle animate-on-load">How I discovered internal package names and registered them on public npm to achieve code execution on a gaming platform's build servers.</p>
+                    <h1 class="animate-on-load">SSRF to RCE — Container Escape on a CI/CD Platform</h1>
+                    <p class="subtitle animate-on-load">How a blind SSRF in a webhook feature escalated to full remote code execution and potential supply chain compromise.</p>
                 </div>
             </div>
         </section>
@@ -254,52 +254,60 @@
         <section class="post-body">
             <div class="container">
 
-                <h2>What Is Dependency Confusion?</h2>
-                <p>Dependency confusion is a supply chain attack that exploits how package managers resolve dependencies. When a company uses private/internal packages with names that aren't registered on public registries (like npm, PyPI), an attacker can register those same names publicly with a higher version number. The build system then pulls the attacker's malicious package instead of the internal one.</p>
+                <h2>The Target</h2>
+                <p>A widely used CI/CD (Continuous Integration / Continuous Delivery) platform that helps engineering teams automate their build, test, and deployment pipelines. Thousands of companies rely on it to ship code to production.</p>
 
-                <h2>The Recon</h2>
-                <p>I started by looking at the target's public-facing JavaScript files. Large applications often bundle their code and ship it to the browser, and the bundle sometimes contains references to internal packages.</p>
-                <p>By analyzing their JavaScript source maps and bundle manifests, I found several references to internal npm packages with a company-specific scope pattern. Some of these packages were scoped (e.g., <code>@company/internal-utils</code>), but a few were unscoped — just plain package names that didn't exist on the public npm registry.</p>
+                <h2>The Discovery</h2>
+                <p>While testing the platform's webhook notification feature, I noticed the application allowed users to specify a URL where build events would be sent. The server would make an HTTP request to that URL whenever a pipeline event occurred.</p>
+                <p>I started by pointing the webhook to my own server and confirmed the request was coming from the platform's infrastructure. Then I tried something simple — pointing the URL at the cloud metadata service:</p>
+                <pre><code>http://169.254.169.254/latest/meta-data/</code></pre>
+                <p>The response came back with the full metadata directory listing. This confirmed a blind SSRF vulnerability — the server was making requests on my behalf without validating the destination.</p>
 
-                <h2>The Attack</h2>
+                <h2>The Escalation Chain</h2>
 
                 <div class="chain-step">
                     <span class="step-num">1</span>
-                    <p><strong>Identify Internal Packages:</strong> I found 3 unscoped internal package names referenced in the JavaScript bundles. A quick search on npmjs.com confirmed none of them were registered publicly.</p>
+                    <p><strong>SSRF — Cloud Metadata Access:</strong> By querying the instance metadata service, I retrieved the IAM role credentials attached to the build worker. These temporary AWS credentials had permissions far beyond what a webhook handler should need.</p>
                 </div>
 
                 <div class="chain-step">
                     <span class="step-num">2</span>
-                    <p><strong>Register the Package:</strong> I registered one of these package names on npm with a version number higher than what the internal registry was likely using (e.g., <code>v99.0.0</code>). The package contained a harmless proof-of-concept — a <code>preinstall</code> script that would make a DNS callback to my server with the hostname and username of the machine running the install.</p>
+                    <p><strong>Token Theft — Service Credentials:</strong> The leaked IAM role had access to internal services, including the ability to pull container images and interact with the orchestration layer. I also found internal API tokens stored as environment variables accessible through the metadata endpoint.</p>
                 </div>
 
                 <div class="chain-step">
                     <span class="step-num">3</span>
-                    <p><strong>Wait for the Callback:</strong> Within hours, I started receiving DNS callbacks from the target's internal build servers. The callbacks confirmed the package was being installed automatically during their CI/CD pipeline runs.</p>
+                    <p><strong>RCE — Command Execution:</strong> Using the stolen credentials, I was able to interact with the container orchestration API and schedule a new container with a custom entrypoint. This gave me a reverse shell inside the platform's infrastructure.</p>
                 </div>
 
                 <div class="chain-step">
                     <span class="step-num">4</span>
-                    <p><strong>Confirm RCE:</strong> The DNS callback included the hostname of internal build machines and the service account username. This proved arbitrary code execution on their build infrastructure — the <code>preinstall</code> script ran as the build user with full access to the build environment.</p>
+                    <p><strong>Container Escape:</strong> The containers were running with elevated privileges. By exploiting a misconfigured mount and the container runtime, I escaped the container boundary and gained access to the host system.</p>
+                </div>
+
+                <div class="chain-step">
+                    <span class="step-num">5</span>
+                    <p><strong>Supply Chain Impact:</strong> From the host, I had visibility into other customers' build pipelines — environment variables, source code references, deployment secrets, and signing keys. Modifying a build pipeline at this point would mean injecting malicious code into every deployment for that customer.</p>
                 </div>
 
                 <h2>Impact</h2>
                 <ul class="impact-list">
-                    <li>Remote code execution on internal build servers</li>
-                    <li>Access to build environment variables (secrets, API keys, tokens)</li>
-                    <li>Ability to inject malicious code into production builds</li>
-                    <li>Potential supply chain compromise affecting millions of end users</li>
+                    <li>Full remote code execution on internal infrastructure</li>
+                    <li>Access to cloud credentials (IAM roles, API tokens)</li>
+                    <li>Container escape to host-level access</li>
+                    <li>Cross-tenant visibility into other customers' pipelines</li>
+                    <li>Potential supply chain attack affecting downstream users</li>
                 </ul>
 
                 <h2>Timeline</h2>
-                <p>Reported immediately after confirming the DNS callbacks. The team acknowledged within hours and began pinning all internal dependencies to their private registry. The malicious package was unpublished from npm within a day.</p>
+                <p>Reported and triaged within 24 hours. The team deployed a fix restricting internal network access from webhook handlers and hardened the container isolation within the same week.</p>
 
                 <div class="moral-box">
                     <h3>Takeaway</h3>
-                    <p>Dependency confusion is one of the most underrated attack vectors in modern software. If a company uses private packages, check if their names are available on public registries. Always look at JavaScript bundles, source maps, and <code>package.json</code> references in exposed files — they often leak internal package names. For defenders: always use scoped packages, pin your registry configuration, and enable namespace reservation on public registries.</p>
+                    <p>Never underestimate a "simple" SSRF. In cloud environments, SSRF is often the first domino — it gives you metadata, metadata gives you credentials, and credentials give you the keys to the kingdom. Always test webhook and callback features for internal network access, especially on platforms that run in cloud infrastructure with IAM roles attached to instances.</p>
                 </div>
 
-                <a href="./blog.html" class="back-button">&larr; Back to Blog</a>
+                <a href="../blog/" class="back-button">&larr; Back to Blog</a>
 
             </div>
         </section>
@@ -310,10 +318,10 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-nav">
-                    <a href="./index.html" class="footer-link">Home</a>
-                    <a href="./about.html" class="footer-link">About</a>
-                    <a href="./blog.html" class="footer-link">Blog</a>
-                    <a href="./work.html" class="footer-link">Work</a>
+                    <a href="../" class="footer-link">Home</a>
+                    <a href="../about/" class="footer-link">About</a>
+                    <a href="../blog/" class="footer-link">Blog</a>
+                    <a href="../work/" class="footer-link">Work</a>
                 </div>
                 <div class="footer-social">
                     <a href="https://github.com/AlyMagdi" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="GitHub">
@@ -341,7 +349,7 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
     </button>
 
-    <script src="shared.js"></script>
+    <script src="../shared.js"></script>
 </body>
 
 </html>

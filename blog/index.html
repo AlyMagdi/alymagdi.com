@@ -9,16 +9,16 @@
     <meta name="theme-color" content="#0f0f0f">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
-    <link rel="icon" href="image/upside_bar_icon.png" type="image/png">
+    <link rel="icon" href="../image/upside_bar_icon.png" type="image/png">
     <meta property="og:title" content="Blog - Rony">
     <meta property="og:description" content="Documented vulnerabilities, write-ups, and security research findings.">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="image/about.ico">
+    <meta property="og:image" content="../image/about.ico">
     <script>(function(){var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);if(window.top===window.self)document.documentElement.style.setProperty('display','block','important');})();</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="../shared.css">
     <style>
         /* === Page-Specific: Blog === */
 
@@ -224,8 +224,8 @@
     <!-- Navigation -->
     <nav>
         <div class="container nav-container">
-            <a href="./index.html" class="logo">
-                <img src="image/upside_bar_icon.png" alt="Rony's Logo">
+            <a href="../" class="logo">
+                <img src="../image/upside_bar_icon.png" alt="Rony's Logo">
             </a>
 
             <div class="menu-toggle" aria-label="Menu" role="button" tabindex="0">
@@ -235,9 +235,9 @@
             </div>
 
             <div class="nav-items">
-                <a href="./about.html" class="nav-link">About</a>
-                <a href="./blog.html" class="nav-link">Blog</a>
-                <a href="./work.html" class="nav-link">Work</a>
+                <a href="../about/" class="nav-link">About</a>
+                <a href="../blog/" class="nav-link">Blog</a>
+                <a href="../work/" class="nav-link">Work</a>
 
                 <button class="theme-toggle" aria-label="Toggle theme">
                     <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
@@ -274,7 +274,7 @@
                 <div class="blog-grid">
 
                     <!-- Blog Post 1 — SSRF to RCE -->
-                    <a href="./blog-ssrf-to-rce.html" class="blog-card section">
+                    <a href="../blog-ssrf-to-rce/" class="blog-card section">
                         <div class="blog-card-header">
                             <span class="blog-date">March 2026</span>
                             <span class="blog-tag tag-critical">Critical</span>
@@ -288,7 +288,7 @@
                     </a>
 
                     <!-- Blog Post 2 — Cross-Enterprise IDOR -->
-                    <a href="./blog-cross-enterprise-idor.html" class="blog-card section">
+                    <a href="../blog-cross-enterprise-idor/" class="blog-card section">
                         <div class="blog-card-header">
                             <span class="blog-date">March 2026</span>
                             <span class="blog-tag tag-critical">Critical</span>
@@ -302,7 +302,7 @@
                     </a>
 
                     <!-- Blog Post 3 — Dependency Confusion -->
-                    <a href="./blog-dependency-confusion.html" class="blog-card section">
+                    <a href="../blog-dependency-confusion/" class="blog-card section">
                         <div class="blog-card-header">
                             <span class="blog-date">March 2026</span>
                             <span class="blog-tag tag-high">High</span>
@@ -316,7 +316,7 @@
                     </a>
 
                     <!-- Blog Post 4 — Cross-Tenant Enumeration -->
-                    <a href="./blog-cross-tenant-enumeration.html" class="blog-card section">
+                    <a href="../blog-cross-tenant-enumeration/" class="blog-card section">
                         <div class="blog-card-header">
                             <span class="blog-date">March 2026</span>
                             <span class="blog-tag tag-high">High</span>
@@ -330,7 +330,7 @@
                     </a>
 
                     <!-- Blog Post 5 — Missing 2FA on KYC -->
-                    <a href="./blog-missing-2fa-kyc.html" class="blog-card section">
+                    <a href="../blog-missing-2fa-kyc/" class="blog-card section">
                         <div class="blog-card-header">
                             <span class="blog-date">March 2026</span>
                             <span class="blog-tag tag-medium">Medium</span>
@@ -350,7 +350,7 @@
 
                 </div>
 
-                <a href="./index.html" class="back-button animate-on-load">&larr; Back to Home</a>
+                <a href="../" class="back-button animate-on-load">&larr; Back to Home</a>
             </div>
         </section>
     </main>
@@ -360,10 +360,10 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-nav">
-                    <a href="./index.html" class="footer-link">Home</a>
-                    <a href="./about.html" class="footer-link">About</a>
-                    <a href="./blog.html" class="footer-link">Blog</a>
-                    <a href="./work.html" class="footer-link">Work</a>
+                    <a href="../" class="footer-link">Home</a>
+                    <a href="../about/" class="footer-link">About</a>
+                    <a href="../blog/" class="footer-link">Blog</a>
+                    <a href="../work/" class="footer-link">Work</a>
                 </div>
                 <div class="footer-social">
                     <a href="https://github.com/AlyMagdi" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="GitHub">
@@ -392,7 +392,7 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
     </button>
 
-    <script src="shared.js"></script>
+    <script src="../shared.js"></script>
 </body>
 
 </html>
