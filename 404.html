@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    <meta name="description" content="Page not found - alymagdi.com">
+    <meta name="theme-color" content="#0f0f0f">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+    <link rel="icon" href="image/upside_bar_icon.png" type="image/png">
+    <script>(function(){var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);if(window.top===window.self)document.documentElement.style.setProperty('display','block','important');})();</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        .hero {
+            padding: 120px 0 80px;
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+        }
+
+        @media (max-width: 809px) {
+            .hero { padding: 64px 0 40px; }
+        }
+
+        .error-content {
+            text-align: center;
+        }
+
+        .error-code {
+            font-size: 120px;
+            font-weight: 700;
+            color: var(--accent-color);
+            line-height: 1;
+            margin-bottom: 16px;
+            text-shadow: 0 0 30px rgba(255, 85, 0, 0.3);
+        }
+
+        @media (max-width: 809px) {
+            .error-code { font-size: 80px; }
+        }
+
+        .error-content h1 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .error-content p {
+            color: var(--text-secondary);
+            font-size: 18px;
+            margin-bottom: 32px;
+        }
+
+        .terminal-404 {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            opacity: 0.7;
+        }
+
+        .terminal-404 span {
+            color: var(--accent-color);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-container">
+            <a href="./index.html" class="logo">
+                <img src="image/upside_bar_icon.png" alt="Rony's Logo">
+            </a>
+
+            <div class="menu-toggle" aria-label="Menu" role="button" tabindex="0">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <div class="nav-items">
+                <a href="./about.html" class="nav-link">About</a>
+                <a href="./blog.html" class="nav-link">Blog</a>
+                <a href="./work.html" class="nav-link">Work</a>
+
+                <button class="theme-toggle" aria-label="Toggle theme">
+                    <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+
+                <button class="email-button">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12.5 3.5H3.5C2.94772 3.5 2.5 3.94772 2.5 4.5V11.5C2.5 12.0523 2.94772 12.5 3.5 12.5H12.5C13.0523 12.5 13.5 12.0523 13.5 11.5V4.5C13.5 3.94772 13.0523 3.5 12.5 3.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2.5 4.5L8 8.5L13.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    E-Mail
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main style="padding-top: 64px;">
+        <section class="hero">
+            <div class="container">
+                <div class="hero-bg-grid" aria-hidden="true"></div>
+                <div class="error-content section" style="position: relative; z-index: 1;">
+                    <div class="error-code animate-on-load">404</div>
+                    <h1 class="animate-on-load">Page Not Found</h1>
+                    <p class="terminal-404 animate-on-load"><span>$</span> curl -I /this-page → <span>HTTP/1.1 404</span></p>
+                    <p class="animate-on-load">The page you're looking for doesn't exist or has been moved.</p>
+                    <a href="./index.html" class="back-button animate-on-load">&larr; Back to Home</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-nav">
+                    <a href="./index.html" class="footer-link">Home</a>
+                    <a href="./about.html" class="footer-link">About</a>
+                    <a href="./blog.html" class="footer-link">Blog</a>
+                    <a href="./work.html" class="footer-link">Work</a>
+                </div>
+                <div class="footer-social">
+                    <a href="https://github.com/AlyMagdi" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="GitHub">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    </a>
+                    <a href="https://hackerone.com/na-rony" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="HackerOne">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.207 0c-.4836 0-.8774.1018-1.1823.3055-.3044.2032-.4568.4752-.4568.816v22.1566c0 .3413.1524.6133.4568.816.3049.2037.6987.3055 1.1823.3055.4836 0 .878-.1018 1.1823-.3055.3049-.2027.4574-.4747.4574-.816V.3055c0-.3408-.1525-.6128-.4574-.816C8.085.1018 7.6912 0 7.207 0zm9.5765 7.3562c-.4836 0-.878.1018-1.1823.3055-.3049.2032-.4574.4752-.4574.816v7.8889c0 .3413.1525.6133.4574.816.3043.2037.6987.3055 1.1823.3055.4841 0 .878-.1018 1.1828-.3055.3044-.2027.4569-.4747.4569-.816V8.4777c0-.3408-.1525-.6128-.4569-.816-.3048-.2037-.6987-.3055-1.1828-.3055z"/></svg>
+                    </a>
+                    <a href="https://medium.com/@naar0ony" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="Medium">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75S24 8.83 24 12z"/></svg>
+                    </a>
+                    <a href="https://www.linkedin.com/in/aly-magdi-92806a392/" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="LinkedIn">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    </a>
+                    <a href="mailto:naar0ony@gmail.com" class="footer-social-link" aria-label="Email">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12.713l-11.985-9.713h23.97l-11.985 9.713zm0 2.574l-12-9.725v15.438h24v-15.438l-12 9.725z"/></svg>
+                    </a>
+                </div>
+                <p class="footer-copy">&copy; <span id="footer-year"></span> Rony. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <button class="scroll-top" aria-label="Scroll to top">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </button>
+
+    <script src="shared.js"></script>
+</body>
+
+</html>

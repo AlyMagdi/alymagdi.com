@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work - Rony</title>
+    <meta name="description" content="Rony's skills, certifications, and tools — API pentesting, web security, and bug bounty.">
+    <meta name="theme-color" content="#0f0f0f">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+    <link rel="icon" href="image/upside_bar_icon.png" type="image/png">
+    <meta property="og:title" content="Work - Rony">
+    <meta property="og:description" content="Skills, certifications, tools, and what I bring to the table.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="image/about.ico">
+    <script>(function(){var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);if(window.top===window.self)document.documentElement.style.setProperty('display','block','important');})();</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        /* === Page-Specific: Work === */
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 0 40px;
+        }
+
+        @media (max-width: 1199px) {
+            .hero { padding: 80px 0 30px; }
+        }
+
+        @media (max-width: 809px) {
+            .hero { padding: 64px 0 20px; }
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+            line-height: 1.1;
+            margin-bottom: 12px;
+        }
+
+        .hero .subtitle {
+            color: var(--text-secondary);
+            font-size: 18px;
+            line-height: 28px;
+            letter-spacing: -0.02em;
+        }
+
+        @media (max-width: 809px) {
+            .hero h1 { font-size: 32px; }
+            .hero .subtitle { font-size: 16px; }
+        }
+
+        /* CV Download Button */
+        .cv-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+            padding: 10px 24px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .cv-button:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 85, 0, 0.2);
+        }
+
+        .cv-button svg {
+            transition: transform 0.3s ease;
+        }
+
+        .cv-button:hover svg {
+            transform: translateY(2px);
+        }
+
+        /* Work Sections */
+        .work-section {
+            padding: 40px 0;
+        }
+
+        .work-section:last-of-type {
+            padding-bottom: 80px;
+        }
+
+        .section-heading {
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .section-heading:hover {
+            color: var(--accent-color);
+            text-shadow: 0 0 8px rgba(255, 85, 0, 0.3);
+        }
+
+        /* What I Do Cards */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 1199px) {
+            .services-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 809px) {
+            .services-grid { grid-template-columns: 1fr; }
+        }
+
+        .service-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 100, 0, 0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .service-card:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 8px 25px rgba(255, 100, 0, 0.15);
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        .service-icon {
+            margin-bottom: 12px;
+            width: 28px;
+            height: 28px;
+        }
+
+        .service-icon svg {
+            width: 28px;
+            height: 28px;
+            fill: var(--text-secondary);
+            transition: all 0.3s ease;
+            opacity: 0.7;
+        }
+
+        .service-card:hover .service-icon svg {
+            fill: var(--accent-color);
+            opacity: 1;
+            filter: drop-shadow(0 0 6px rgba(255, 85, 0, 0.4));
+        }
+
+        .service-card h3 {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover h3 {
+            color: var(--accent-color);
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 22px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Skills */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 809px) {
+            .skills-grid { grid-template-columns: 1fr; }
+        }
+
+        .skill-category {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .skill-category:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 15px rgba(255, 100, 0, 0.1);
+        }
+
+        .skill-category h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--accent-color);
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .skill-tag {
+            font-size: 13px;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 20px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .skill-tag:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            box-shadow: 0 0 10px rgba(255, 85, 0, 0.2);
+        }
+
+        /* Certifications */
+        .certs-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .cert-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .cert-item:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 15px rgba(255, 100, 0, 0.1);
+            transform: translateX(4px);
+        }
+
+        .cert-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .cert-badge img {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            object-fit: contain;
+        }
+
+        .cert-info h3 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .cert-info p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tool-pill {
+            font-size: 13px;
+            font-weight: 500;
+            padding: 8px 18px;
+            border-radius: 25px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .tool-pill:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 85, 0, 0.15);
+        }
+
+        /* Stats */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 809px) {
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .stat-box {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-box:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 15px rgba(255, 100, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--accent-color);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Platforms row */
+        .platforms-row {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .platform-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .platform-badge:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 100, 0, 0.2);
+        }
+
+        .platform-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-container">
+            <a href="./index.html" class="logo">
+                <img src="image/upside_bar_icon.png" alt="Rony's Logo">
+            </a>
+
+            <div class="menu-toggle" aria-label="Menu" role="button" tabindex="0">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <div class="nav-items">
+                <a href="./about.html" class="nav-link">About</a>
+                <a href="./blog.html" class="nav-link">Blog</a>
+                <a href="./work.html" class="nav-link">Work</a>
+
+                <button class="theme-toggle" aria-label="Toggle theme">
+                    <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+
+                <button class="email-button">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12.5 3.5H3.5C2.94772 3.5 2.5 3.94772 2.5 4.5V11.5C2.5 12.0523 2.94772 12.5 3.5 12.5H12.5C13.0523 12.5 13.5 12.0523 13.5 11.5V4.5C13.5 3.94772 13.0523 3.5 12.5 3.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2.5 4.5L8 8.5L13.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    E-Mail
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main style="padding-top: 64px;">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-bg-grid" aria-hidden="true"></div>
+                <div class="section" style="position: relative; z-index: 1;">
+                    <h1 class="animate-on-load">My Work</h1>
+                    <p class="subtitle animate-on-load">Skills, certifications, tools, and what I bring to the table.</p>
+                    <a href="resume.pdf" target="_blank" rel="noopener noreferrer" class="cv-button animate-on-load">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Download CV
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats -->
+        <section class="work-section">
+            <div class="container">
+                <div class="stats-row section">
+                    <div class="stat-box">
+                        <div class="stat-number" data-count="200" data-suffix="+">0</div>
+                        <div class="stat-label">Accepted Reports</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" data-count="2">0</div>
+                        <div class="stat-label">Years Experience</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">H1</div>
+                        <div class="stat-label">HackerOne</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" data-count="3">0</div>
+                        <div class="stat-label">Certifications</div>
+                    </div>
+                </div>
+
+                <!-- Platforms -->
+                <div class="platforms-row section">
+                    <span class="platform-badge">
+                        <span class="platform-dot"></span>
+                        HackerOne
+                    </span>
+                    <span class="platform-badge">
+                        <span class="platform-dot"></span>
+                        Bugcrowd
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- What I Do -->
+        <section class="work-section">
+            <div class="container">
+                <h2 class="section-heading section">What I Do</h2>
+                <div class="services-grid">
+                    <div class="service-card section">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                        </div>
+                        <h3>Web Application Pentesting</h3>
+                        <p>Manual testing of web applications for vulnerabilities including XSS, SQLi, SSRF, IDOR, authentication bypasses, and business logic flaws.</p>
+                    </div>
+                    <div class="service-card section">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+                        </div>
+                        <h3>API Security Testing</h3>
+                        <p>Deep analysis of REST and GraphQL APIs for broken access controls, scope bypasses, data exposure, and authorization flaws.</p>
+                    </div>
+                    <div class="service-card section">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 8l-4 4h3c0 3.31-2.69 6-6 6-1.01 0-1.97-.25-2.8-.7l-1.46 1.46C8.97 19.54 10.43 20 12 20c4.42 0 8-3.58 8-8h3l-4-4zM6 12c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46C15.03 4.46 13.57 4 12 4c-4.42 0-8 3.58-8 8H1l4 4 4-4H6z"/><circle cx="12" cy="12" r="2"/></svg>
+                        </div>
+                        <h3>Bug Bounty Hunting</h3>
+                        <p>Active researcher on HackerOne and Bugcrowd, finding and responsibly disclosing vulnerabilities in major technology platforms.</p>
+                    </div>
+                    <div class="service-card section">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                        </div>
+                        <h3>Authentication & Session Testing</h3>
+                        <p>Testing login flows, session management, OAuth implementations, token handling, and privilege escalation vectors.</p>
+                    </div>
+                    <div class="service-card section">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                        </div>
+                        <h3>Recon & Asset Discovery</h3>
+                        <p>Subdomain enumeration, port scanning, JS analysis, source map review, and attack surface mapping at scale.</p>
+                    </div>
+                    <div class="service-card section">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                        </div>
+                        <h3>Security Reporting</h3>
+                        <p>Clear, detailed vulnerability reports with PoC, impact assessment, and remediation guidance to help teams fix issues fast.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills -->
+        <section class="work-section">
+            <div class="container">
+                <h2 class="section-heading section">Skills</h2>
+                <div class="skills-grid">
+                    <div class="skill-category section">
+                        <h3>Vulnerabilities Found</h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag">SSRF</span>
+                            <span class="skill-tag">IDOR</span>
+                            <span class="skill-tag">Authentication Bypass</span>
+                            <span class="skill-tag">Broken Access Control</span>
+                            <span class="skill-tag">Dependency Confusion</span>
+                            <span class="skill-tag">Stored XSS</span>
+                            <span class="skill-tag">Subdomain Takeover</span>
+                            <span class="skill-tag">DNS Misconfiguration</span>
+                            <span class="skill-tag">PII Exposure</span>
+                            <span class="skill-tag">Missing Rate Limiting</span>
+                            <span class="skill-tag">SQL Injection</span>
+                            <span class="skill-tag">CSRF</span>
+                            <span class="skill-tag">Information Disclosure</span>
+                            <span class="skill-tag">Missing 2FA</span>
+                        </div>
+                    </div>
+                    <div class="skill-category section">
+                        <h3>Technical Skills</h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag">API Penetration Testing</span>
+                            <span class="skill-tag">OWASP Top 10 & Beyond</span>
+                            <span class="skill-tag">CVSS 4.0</span>
+                            <span class="skill-tag">Bash</span>
+                            <span class="skill-tag">MySQL</span>
+                            <span class="skill-tag">Git & GitHub</span>
+                        </div>
+                    </div>
+                    <div class="skill-category section">
+                        <h3>Tools</h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Burp Suite</span>
+                            <span class="skill-tag">Caido</span>
+                            <span class="skill-tag">Postman</span>
+                            <span class="skill-tag">Nmap</span>
+                            <span class="skill-tag">Kali Linux</span>
+                        </div>
+                    </div>
+                    <div class="skill-category section">
+                        <h3>Experience</h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag">2 Years Bug Hunting</span>
+                            <span class="skill-tag">HackerOne</span>
+                            <span class="skill-tag">200+ Accepted Reports</span>
+                            <span class="skill-tag">Responsible Disclosure</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tools -->
+        <section class="work-section">
+            <div class="container">
+                <h2 class="section-heading section">Tools I Use</h2>
+                <div class="tools-grid section">
+                    <span class="tool-pill">Burp Suite</span>
+                    <span class="tool-pill">Caido</span>
+                    <span class="tool-pill">Postman</span>
+                    <span class="tool-pill">Nmap</span>
+                    <span class="tool-pill">Kali Linux</span>
+                    <span class="tool-pill">Git & GitHub</span>
+                    <span class="tool-pill">Bash</span>
+                    <span class="tool-pill">MySQL</span>
+                    <span class="tool-pill">Claude</span>
+                    <span class="tool-pill">Kimi AI</span>
+                    <span class="tool-pill">Prexability</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Certifications -->
+        <section class="work-section">
+            <div class="container">
+                <h2 class="section-heading section">Certifications</h2>
+                <div class="certs-list">
+                    <a href="https://www.credly.com/badges/a9c1cef3-750b-4652-8d08-c7bc0ee55d99/linked_in_profile" target="_blank" rel="noopener noreferrer" class="cert-item section">
+                        <div class="cert-badge"><img src="image/apisec.png" alt="APIsec" loading="lazy"></div>
+                        <div class="cert-info">
+                            <h3>API Penetration Testing</h3>
+                            <p>APIsec University</p>
+                        </div>
+                    </a>
+                    <a href="https://www.credly.com/badges/9f59edaf-a13b-46b3-ada8-23665ed79949/linked_in_profile" target="_blank" rel="noopener noreferrer" class="cert-item section">
+                        <div class="cert-badge"><img src="image/apisec.png" alt="APIsec" loading="lazy"></div>
+                        <div class="cert-info">
+                            <h3>OWASP API Security Top 10</h3>
+                            <p>APIsec University</p>
+                        </div>
+                    </a>
+                    <a href="https://drive.google.com/drive/folders/1xL_G_i2XQMAbGnQwqKu-hvMnOciCwh8H?usp=sharing&pli=1" target="_blank" rel="noopener noreferrer" class="cert-item section">
+                        <div class="cert-badge"><img src="image/first-org-green.svg" alt="FIRST" loading="lazy"></div>
+                        <div class="cert-info">
+                            <h3>CVSS v4.0</h3>
+                            <p>FIRST</p>
+                        </div>
+                    </a>
+                </div>
+
+                <a href="./index.html" class="back-button animate-on-load">&larr; Back to Home</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-nav">
+                    <a href="./index.html" class="footer-link">Home</a>
+                    <a href="./about.html" class="footer-link">About</a>
+                    <a href="./blog.html" class="footer-link">Blog</a>
+                    <a href="./work.html" class="footer-link">Work</a>
+                </div>
+                <div class="footer-social">
+                    <a href="https://github.com/AlyMagdi" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="GitHub">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    </a>
+                    <a href="https://hackerone.com/na-rony" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="HackerOne">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.207 0c-.4836 0-.8774.1018-1.1823.3055-.3044.2032-.4568.4752-.4568.816v22.1566c0 .3413.1524.6133.4568.816.3049.2037.6987.3055 1.1823.3055.4836 0 .878-.1018 1.1823-.3055.3049-.2027.4574-.4747.4574-.816V.3055c0-.3408-.1525-.6128-.4574-.816C8.085.1018 7.6912 0 7.207 0zm9.5765 7.3562c-.4836 0-.878.1018-1.1823.3055-.3049.2032-.4574.4752-.4574.816v7.8889c0 .3413.1525.6133.4574.816.3043.2037.6987.3055 1.1823.3055.4841 0 .878-.1018 1.1828-.3055.3044-.2027.4569-.4747.4569-.816V8.4777c0-.3408-.1525-.6128-.4569-.816-.3048-.2037-.6987-.3055-1.1828-.3055z"/></svg>
+                    </a>
+                    <a href="https://medium.com/@naar0ony" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="Medium">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75S24 8.83 24 12z"/></svg>
+                    </a>
+                    <a href="https://www.linkedin.com/in/aly-magdi-92806a392/" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="LinkedIn">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    </a>
+                    <a href="mailto:naar0ony@gmail.com" class="footer-social-link" aria-label="Email">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12.713l-11.985-9.713h23.97l-11.985 9.713zm0 2.574l-12-9.725v15.438h24v-15.438l-12 9.725z"/></svg>
+                    </a>
+                </div>
+                <p class="footer-copy">&copy; <span id="footer-year"></span> Rony. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top -->
+    <button class="scroll-top" aria-label="Scroll to top">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </button>
+
+    <script src="shared.js"></script>
+    <script>
+        // Animated stat counters
+        document.addEventListener('DOMContentLoaded', function () {
+            var counters = document.querySelectorAll('.stat-number[data-count]');
+            var animated = false;
+
+            function animateCounters() {
+                if (animated) return;
+                counters.forEach(function (el) {
+                    var target = parseInt(el.getAttribute('data-count'));
+                    var suffix = el.getAttribute('data-suffix') || '';
+                    var duration = 1500;
+                    var start = 0;
+                    var startTime = null;
+
+                    function step(timestamp) {
+                        if (!startTime) startTime = timestamp;
+                        var progress = Math.min((timestamp - startTime) / duration, 1);
+                        var eased = 1 - Math.pow(1 - progress, 3);
+                        var current = Math.floor(eased * target);
+                        el.textContent = current + suffix;
+                        if (progress < 1) {
+                            requestAnimationFrame(step);
+                        } else {
+                            el.textContent = target + suffix;
+                        }
+                    }
+
+                    requestAnimationFrame(step);
+                });
+                animated = true;
+            }
+
+            var statsRow = document.querySelector('.stats-row');
+            if (statsRow && 'IntersectionObserver' in window) {
+                var observer = new IntersectionObserver(function (entries) {
+                    if (entries[0].isIntersecting) {
+                        animateCounters();
+                        observer.disconnect();
+                    }
+                }, { threshold: 0.5 });
+                observer.observe(statsRow);
+            } else {
+                animateCounters();
+            }
+        });
+    </script>
+</body>
+
+</html>
