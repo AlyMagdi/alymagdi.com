@@ -19,27 +19,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- Theme Toggle Button ---
     var toggle = document.querySelector('.theme-toggle');
-    var validThemes = ['dark', 'light'];
     if (toggle) {
         toggle.addEventListener('click', function () {
             var current = document.documentElement.getAttribute('data-theme');
-            var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            var next;
+            // Default (no attribute) is dark, so toggle to light; if light, toggle back
+            var next = (current === 'light') ? 'dark' : 'light';
 
-            if (current === 'dark' || (!current && prefersDark)) {
-                next = 'light';
-            } else {
-                next = 'dark';
-            }
-
-            if (validThemes.indexOf(next) === -1) return;
             document.documentElement.setAttribute('data-theme', next);
             localStorage.setItem('theme', next);
 
             // Update theme-color meta
             var meta = document.querySelector('meta[name="theme-color"]');
             if (meta) {
-                meta.setAttribute('content', next === 'dark' ? '#0f0f0f' : '#fafafa');
+                meta.setAttribute('content', next === 'light' ? '#fafafa' : '#0f0f0f');
             }
         });
     }

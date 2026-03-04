@@ -16,39 +16,18 @@ html {
 }
 
 /* --- CSS Variables & Theme --- */
+/* Dark theme is the default */
 :root {
-    --bg-color: #fafafa;
-    --text-primary: #0d0d0d;
-    --text-secondary: #7a7a7a;
-    --border-color: #f0f0f0;
-    --accent-color: #ff5500;
-    --card-bg: #ffffff;
-    --card-bg-alpha: rgba(255, 255, 255, 0.85);
-}
-
-/* OS dark preference (default, no manual override) */
-@media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-        --bg-color: #0f0f0f;
-        --text-primary: #ededed;
-        --text-secondary: #ababab;
-        --border-color: #1c1c1c;
-        --card-bg: #151515;
-        --card-bg-alpha: rgba(21, 21, 21, 0.85);
-    }
-}
-
-/* Manual dark override */
-[data-theme="dark"] {
     --bg-color: #0f0f0f;
     --text-primary: #ededed;
     --text-secondary: #ababab;
     --border-color: #1c1c1c;
+    --accent-color: #ff5500;
     --card-bg: #151515;
     --card-bg-alpha: rgba(21, 21, 21, 0.85);
 }
 
-/* Manual light override */
+/* Light theme only when explicitly selected */
 [data-theme="light"] {
     --bg-color: #fafafa;
     --text-primary: #0d0d0d;
@@ -232,16 +211,10 @@ nav {
     box-shadow: 0 0 10px rgba(255, 85, 0, 0.2);
 }
 
-/* Show sun in dark mode, moon in light mode */
-.icon-sun { display: none; }
-.icon-moon { display: block; }
+/* Dark is default: show sun (to switch to light) by default */
+.icon-sun { display: block; }
+.icon-moon { display: none; }
 
-@media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .icon-sun { display: block; }
-    :root:not([data-theme="light"]) .icon-moon { display: none; }
-}
-[data-theme="dark"] .icon-sun { display: block; }
-[data-theme="dark"] .icon-moon { display: none; }
 [data-theme="light"] .icon-sun { display: none; }
 [data-theme="light"] .icon-moon { display: block; }
 
