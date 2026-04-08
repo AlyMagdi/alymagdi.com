@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dependency Confusion — RCE via Package Hijacking - Rony</title>
+    <title>Dependency Confusion: RCE via Package Hijacking - Rony</title>
     <meta name="description" content="How a dependency confusion attack on a major gaming platform's npm packages led to remote code execution on internal build systems.">
     <meta name="theme-color" content="#0f0f0f">
     <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -245,7 +245,7 @@
                         <span class="post-date">July 2025</span>
                         <span class="severity-tag tag-high">High</span>
                     </div>
-                    <h1 class="animate-on-load">Dependency Confusion — RCE via Package Hijacking</h1>
+                    <h1 class="animate-on-load">Dependency Confusion: RCE via Package Hijacking</h1>
                     <p class="subtitle animate-on-load">How I discovered internal package names and registered them on public npm to achieve code execution on a gaming platform's build servers.</p>
                 </div>
             </div>
@@ -259,7 +259,7 @@
 
                 <h2>The Recon</h2>
                 <p>I started by looking at the target's public-facing JavaScript files. Large applications often bundle their code and ship it to the browser, and the bundle sometimes contains references to internal packages.</p>
-                <p>By analyzing their JavaScript source maps and bundle manifests, I found several references to internal npm packages with a company-specific scope pattern. Some of these packages were scoped (e.g., <code>@company/internal-utils</code>), but a few were unscoped — just plain package names that didn't exist on the public npm registry.</p>
+                <p>By analyzing their JavaScript source maps and bundle manifests, I found several references to internal npm packages with a company-specific scope pattern. Some of these packages were scoped (e.g., <code>@company/internal-utils</code>), but a few were unscoped, just plain package names that didn't exist on the public npm registry.</p>
 
                 <h2>The Attack</h2>
 
@@ -270,7 +270,7 @@
 
                 <div class="chain-step">
                     <span class="step-num">2</span>
-                    <p><strong>Register the Package:</strong> I registered one of these package names on npm with a version number higher than what the internal registry was likely using (e.g., <code>v99.0.0</code>). The package contained a harmless proof-of-concept — a <code>preinstall</code> script that would make a DNS callback to my server with the hostname and username of the machine running the install.</p>
+                    <p><strong>Register the Package:</strong> I registered one of these package names on npm with a version number higher than what the internal registry was likely using (e.g., <code>v99.0.0</code>). The package contained a harmless proof-of-concept, a <code>preinstall</code> script that would make a DNS callback to my server with the hostname and username of the machine running the install.</p>
                 </div>
 
                 <div class="chain-step">
@@ -280,7 +280,7 @@
 
                 <div class="chain-step">
                     <span class="step-num">4</span>
-                    <p><strong>Confirm RCE:</strong> The DNS callback included the hostname of internal build machines and the service account username. This proved arbitrary code execution on their build infrastructure — the <code>preinstall</code> script ran as the build user with full access to the build environment.</p>
+                    <p><strong>Confirm RCE:</strong> The DNS callback included the hostname of internal build machines and the service account username. This proved arbitrary code execution on their build infrastructure. The <code>preinstall</code> script ran as the build user with full access to the build environment.</p>
                 </div>
 
                 <h2>Impact</h2>
@@ -296,7 +296,7 @@
 
                 <div class="moral-box">
                     <h3>Takeaway</h3>
-                    <p>Dependency confusion is one of the most underrated attack vectors in modern software. If a company uses private packages, check if their names are available on public registries. Always look at JavaScript bundles, source maps, and <code>package.json</code> references in exposed files — they often leak internal package names. For defenders: always use scoped packages, pin your registry configuration, and enable namespace reservation on public registries.</p>
+                    <p>Dependency confusion is one of the most underrated attack vectors in modern software. If a company uses private packages, check if their names are available on public registries. Always look at JavaScript bundles, source maps, and <code>package.json</code> references in exposed files. They often leak internal package names. For defenders: always use scoped packages, pin your registry configuration, and enable namespace reservation on public registries.</p>
                 </div>
 
                 <a href="../blog/" class="back-button">&larr; Back to Blog</a>

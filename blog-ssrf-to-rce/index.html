@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSRF to RCE — Container Escape on a CI/CD Platform - Rony</title>
+    <title>SSRF to RCE: Container Escape on a CI/CD Platform - Rony</title>
     <meta name="description" content="How a blind SSRF escalated to full remote code execution, container escape, and potential supply chain compromise on a major CI/CD platform.">
     <meta name="theme-color" content="#0f0f0f">
     <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -245,7 +245,7 @@
                         <span class="post-date">February 2026</span>
                         <span class="severity-tag tag-critical">Critical</span>
                     </div>
-                    <h1 class="animate-on-load">SSRF to RCE — Container Escape on a CI/CD Platform</h1>
+                    <h1 class="animate-on-load">SSRF to RCE: Container Escape on a CI/CD Platform</h1>
                     <p class="subtitle animate-on-load">How a blind SSRF in a webhook feature escalated to full remote code execution and potential supply chain compromise.</p>
                 </div>
             </div>
@@ -259,25 +259,25 @@
 
                 <h2>The Discovery</h2>
                 <p>While testing the platform's webhook notification feature, I noticed the application allowed users to specify a URL where build events would be sent. The server would make an HTTP request to that URL whenever a pipeline event occurred.</p>
-                <p>I started by pointing the webhook to my own server and confirmed the request was coming from the platform's infrastructure. Then I tried something simple — pointing the URL at the cloud metadata service:</p>
+                <p>I started by pointing the webhook to my own server and confirmed the request was coming from the platform's infrastructure. Then I tried something simple, pointing the URL at the cloud metadata service:</p>
                 <pre><code>http://169.254.169.254/latest/meta-data/</code></pre>
-                <p>The response came back with the full metadata directory listing. This confirmed a blind SSRF vulnerability — the server was making requests on my behalf without validating the destination.</p>
+                <p>The response came back with the full metadata directory listing. This confirmed a blind SSRF vulnerability. The server was making requests on my behalf without validating the destination.</p>
 
                 <h2>The Escalation Chain</h2>
 
                 <div class="chain-step">
                     <span class="step-num">1</span>
-                    <p><strong>SSRF — Cloud Metadata Access:</strong> By querying the instance metadata service, I retrieved the IAM role credentials attached to the build worker. These temporary AWS credentials had permissions far beyond what a webhook handler should need.</p>
+                    <p><strong>SSRF, Cloud Metadata Access:</strong> By querying the instance metadata service, I retrieved the IAM role credentials attached to the build worker. These temporary AWS credentials had permissions far beyond what a webhook handler should need.</p>
                 </div>
 
                 <div class="chain-step">
                     <span class="step-num">2</span>
-                    <p><strong>Token Theft — Service Credentials:</strong> The leaked IAM role had access to internal services, including the ability to pull container images and interact with the orchestration layer. I also found internal API tokens stored as environment variables accessible through the metadata endpoint.</p>
+                    <p><strong>Token Theft, Service Credentials:</strong> The leaked IAM role had access to internal services, including the ability to pull container images and interact with the orchestration layer. I also found internal API tokens stored as environment variables accessible through the metadata endpoint.</p>
                 </div>
 
                 <div class="chain-step">
                     <span class="step-num">3</span>
-                    <p><strong>RCE — Command Execution:</strong> Using the stolen credentials, I was able to interact with the container orchestration API and schedule a new container with a custom entrypoint. This gave me a reverse shell inside the platform's infrastructure.</p>
+                    <p><strong>RCE, Command Execution:</strong> Using the stolen credentials, I was able to interact with the container orchestration API and schedule a new container with a custom entrypoint. This gave me a reverse shell inside the platform's infrastructure.</p>
                 </div>
 
                 <div class="chain-step">
@@ -287,7 +287,7 @@
 
                 <div class="chain-step">
                     <span class="step-num">5</span>
-                    <p><strong>Supply Chain Impact:</strong> From the host, I had visibility into other customers' build pipelines — environment variables, source code references, deployment secrets, and signing keys. Modifying a build pipeline at this point would mean injecting malicious code into every deployment for that customer.</p>
+                    <p><strong>Supply Chain Impact:</strong> From the host, I had visibility into other customers' build pipelines: environment variables, source code references, deployment secrets, and signing keys. Modifying a build pipeline at this point would mean injecting malicious code into every deployment for that customer.</p>
                 </div>
 
                 <h2>Impact</h2>
@@ -304,7 +304,7 @@
 
                 <div class="moral-box">
                     <h3>Takeaway</h3>
-                    <p>Never underestimate a "simple" SSRF. In cloud environments, SSRF is often the first domino — it gives you metadata, metadata gives you credentials, and credentials give you the keys to the kingdom. Always test webhook and callback features for internal network access, especially on platforms that run in cloud infrastructure with IAM roles attached to instances.</p>
+                    <p>Never underestimate a "simple" SSRF. In cloud environments, SSRF is often the first domino. It gives you metadata, metadata gives you credentials, and credentials give you the keys to the kingdom. Always test webhook and callback features for internal network access, especially on platforms that run in cloud infrastructure with IAM roles attached to instances.</p>
                 </div>
 
                 <a href="../blog/" class="back-button">&larr; Back to Blog</a>
