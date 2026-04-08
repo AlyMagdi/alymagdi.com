@@ -4,118 +4,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog - Rony</title>
-    <meta name="description" content="Bug hunting write-ups and security research findings by Rony.">
+    <title>Cross-Tenant Data Access via API Token Prefix Trust - Rony</title>
+    <meta name="description" content="How a flawed API token parsing mechanism allowed full cross-tenant access to thousands of employee records including national IDs, salaries, and addresses.">
     <meta name="theme-color" content="#0f0f0f">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
     <link rel="icon" href="/image/upside_bar_icon.png" type="image/png">
-    <meta property="og:title" content="Blog - Rony">
-    <meta property="og:description" content="Documented vulnerabilities, write-ups, and security research findings.">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="https://alymagdi.com/image/about.ico">
     <script>(function(){var t=localStorage.getItem('theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');if(window.top===window.self)document.documentElement.style.setProperty('display','block','important');})();</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../shared.css">
     <style>
-        /* === Page-Specific: Blog === */
-
-        /* Hero Section */
-        .hero {
+        .post-hero {
             padding: 120px 0 40px;
         }
 
-        @media (max-width: 1199px) {
-            .hero { padding: 80px 0 30px; }
-        }
-
         @media (max-width: 809px) {
-            .hero { padding: 64px 0 20px; }
+            .post-hero { padding: 64px 0 20px; }
         }
 
-        .hero h1 {
-            font-size: 48px;
-            font-weight: 700;
-            letter-spacing: -0.05em;
-            line-height: 1.1;
-            margin-bottom: 12px;
-        }
-
-        .hero .subtitle {
-            color: var(--text-secondary);
-            font-size: 18px;
-            line-height: 28px;
-            letter-spacing: -0.02em;
-        }
-
-        @media (max-width: 809px) {
-            .hero h1 { font-size: 32px; }
-            .hero .subtitle { font-size: 16px; }
-        }
-
-        /* Blog Posts */
-        .blog-section {
-            padding: 40px 0 80px;
-        }
-
-        .blog-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        .blog-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 28px 32px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-
-        .blog-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255, 100, 0, 0.05), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .blog-card:hover {
-            border-color: var(--accent-color);
-            box-shadow: 0 8px 25px rgba(255, 100, 0, 0.15);
-        }
-
-        .blog-card:hover::before {
-            opacity: 1;
-        }
-
-        .blog-card-header {
+        .post-meta {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
             flex-wrap: wrap;
         }
 
-        .blog-date {
+        .post-date {
             font-size: 13px;
             color: var(--text-secondary);
-            font-weight: 400;
         }
 
-        .blog-tag {
+        .severity-tag {
             font-size: 11px;
             font-weight: 600;
             padding: 3px 10px;
@@ -129,93 +51,151 @@
             color: #ef4444;
         }
 
-        .tag-high {
-            background-color: rgba(255, 85, 0, 0.15);
-            color: #ff5500;
+        .post-hero h1 {
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            line-height: 1.2;
+            margin-bottom: 12px;
         }
 
-        .tag-medium {
-            background-color: rgba(234, 179, 8, 0.15);
-            color: #eab308;
+        @media (max-width: 809px) {
+            .post-hero h1 { font-size: 26px; }
         }
 
-        .tag-low {
-            background-color: rgba(34, 197, 94, 0.15);
-            color: #22c55e;
+        .post-hero .subtitle {
+            color: var(--text-secondary);
+            font-size: 17px;
+            line-height: 28px;
         }
 
-        .blog-card h3 {
-            font-size: 20px;
+        .post-body {
+            padding: 20px 0 80px;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .post-body h2 {
+            font-size: 22px;
             font-weight: 600;
-            letter-spacing: -0.03em;
-            margin-bottom: 8px;
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 1;
+            margin: 40px 0 12px;
+            letter-spacing: -0.02em;
         }
 
-        .blog-card:hover h3 {
-            color: var(--accent-color);
-            text-shadow: 0 0 10px rgba(255, 85, 0, 0.3);
+        .post-body h2:first-child {
+            margin-top: 0;
         }
 
-        .blog-card p {
-            color: var(--text-secondary);
-            font-size: 15px;
-            line-height: 24px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .blog-card-footer {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-top: 16px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .blog-platform {
-            font-size: 12px;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .blog-platform::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background-color: var(--accent-color);
-            display: inline-block;
-        }
-
-        .read-more {
-            font-size: 13px;
-            color: var(--accent-color);
-            font-weight: 500;
-            margin-left: auto;
-            transition: all 0.3s ease;
-        }
-
-        .blog-card:hover .read-more {
-            text-shadow: 0 0 8px rgba(255, 85, 0, 0.5);
-        }
-
-        /* Coming soon */
-        .coming-soon {
-            text-align: center;
-            padding: 60px 20px;
+        .post-body p {
             color: var(--text-secondary);
             font-size: 16px;
+            line-height: 28px;
+            margin-bottom: 16px;
         }
 
-        .coming-soon span {
+        .post-body ul, .post-body ol {
+            color: var(--text-secondary);
+            font-size: 16px;
+            line-height: 28px;
+            margin-bottom: 16px;
+            padding-left: 24px;
+        }
+
+        .post-body li {
+            margin-bottom: 6px;
+        }
+
+        .post-body code {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            background-color: var(--border-color);
+            padding: 2px 8px;
+            border-radius: 4px;
             color: var(--accent-color);
+        }
+
+        .post-body pre {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px 20px;
+            overflow-x: auto;
+            margin-bottom: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 22px;
+            color: var(--text-secondary);
+        }
+
+        .post-body pre code {
+            background: none;
+            padding: 0;
+            font-size: 13px;
+        }
+
+        .chain-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .chain-step .step-num {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: rgba(255, 85, 0, 0.12);
+            color: var(--accent-color);
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chain-step p {
+            margin-bottom: 0;
+        }
+
+        .moral-box {
+            background-color: var(--card-bg);
+            border-left: 3px solid var(--accent-color);
+            border-radius: 0 8px 8px 0;
+            padding: 20px 24px;
+            margin: 32px 0;
+        }
+
+        .moral-box h3 {
+            font-size: 16px;
             font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--accent-color);
+        }
+
+        .moral-box p {
+            margin-bottom: 0;
+        }
+
+        .impact-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .impact-list li {
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .impact-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 11px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #ef4444;
         }
     </style>
 </head>
@@ -257,72 +237,80 @@
 
     <!-- Main Content -->
     <main style="padding-top: 64px;">
-        <!-- Hero Section -->
-        <section class="hero">
+        <section class="post-hero hero">
             <div class="container">
                 <div class="hero-bg-grid" aria-hidden="true"></div>
                 <div class="section" style="position: relative; z-index: 1;">
-                    <h1 class="animate-on-load">Bug Hunting Blog</h1>
-                    <p class="subtitle animate-on-load">Documented vulnerabilities, write-ups, and security research findings.</p>
+                    <div class="post-meta">
+                        <span class="post-date">April 2026</span>
+                        <span class="severity-tag tag-critical">Critical</span>
+                    </div>
+                    <h1 class="animate-on-load">Cross-Tenant Data Access via API Token Prefix Trust</h1>
+                    <p class="subtitle animate-on-load">How a flawed token parsing mechanism gave full read and write access across tenant boundaries on a global HR platform.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Blog Posts -->
-        <section class="blog-section">
+        <section class="post-body">
             <div class="container">
-                <div class="blog-grid">
 
-                    <!-- Blog Post 1: Cross-Tenant Token -->
-                    <a href="../blog-cross-tenant-token/" class="blog-card section">
-                        <div class="blog-card-header">
-                            <span class="blog-date">April 2026</span>
-                            <span class="blog-tag tag-critical">Critical</span>
-                        </div>
-                        <h3>Cross-Tenant Data Access via API Token Prefix Trust</h3>
-                        <p>A flawed token parsing mechanism trusted the company ID embedded in the token string instead of resolving it from the database, giving full read and write access across tenant boundaries on a global HR platform.</p>
-                        <div class="blog-card-footer">
-                            <span class="blog-platform">Write-Up</span>
-                            <span class="read-more">Read more →</span>
-                        </div>
-                    </a>
+                <h2>The Target</h2>
+                <p>A global HR and employer-of-record platform that manages payroll, contracts, and employee data for companies across dozens of countries. The platform exposes a public API that customers use to integrate with their own systems.</p>
 
-                    <!-- Blog Post 2: SSRF to RCE -->
-                    <a href="../blog-ssrf-to-rce/" class="blog-card section">
-                        <div class="blog-card-header">
-                            <span class="blog-date">February 2026</span>
-                            <span class="blog-tag tag-critical">Critical</span>
-                        </div>
-                        <h3>SSRF to RCE: Container Escape on a CI/CD Platform</h3>
-                        <p>A blind SSRF in a webhook feature escalated to full remote code execution, container escape, and potential supply chain compromise affecting thousands of downstream customers.</p>
-                        <div class="blog-card-footer">
-                            <span class="blog-platform">Write-Up</span>
-                            <span class="read-more">Read more →</span>
-                        </div>
-                    </a>
+                <h2>The Discovery</h2>
+                <p>The platform's API tokens follow a predictable format: <code>ra_test_{company_id}_{secret}</code>. Each token embeds the company UUID directly in the string. I noticed the server validates the secret portion against the database, but uses the company ID from the token string itself to set the tenant context.</p>
+                <p>That means if you take a valid token and swap the company ID prefix with another company's UUID, the server authenticates you as your own user but drops you into the target company's context.</p>
 
-                    <!-- Blog Post 3: Dependency Confusion -->
-                    <a href="../blog-dependency-confusion/" class="blog-card section">
-                        <div class="blog-card-header">
-                            <span class="blog-date">July 2025</span>
-                            <span class="blog-tag tag-high">High</span>
-                        </div>
-                        <h3>Dependency Confusion: RCE via Package Hijacking</h3>
-                        <p>Discovered internal npm package names in JavaScript bundles and registered them on the public registry, achieving remote code execution on a gaming platform's build servers.</p>
-                        <div class="blog-card-footer">
-                            <span class="blog-platform">Write-Up</span>
-                            <span class="read-more">Read more →</span>
-                        </div>
-                    </a>
+                <h2>The Attack</h2>
 
-                    <!-- Coming Soon -->
-                    <div class="coming-soon section">
-                        <p>More write-ups <span>coming soon</span>, stay tuned.</p>
-                    </div>
-
+                <div class="chain-step">
+                    <span class="step-num">1</span>
+                    <p><strong>Token format analysis:</strong> I created two separate accounts on the platform. Each got an API token with the same format. The only difference between them was the company ID prefix and the secret suffix.</p>
                 </div>
 
-                <a href="../" class="back-button animate-on-load">&larr; Back to Home</a>
+                <div class="chain-step">
+                    <span class="step-num">2</span>
+                    <p><strong>Prefix swap:</strong> I took Account B's secret and prepended Account A's company ID. Called the identity endpoint. The server authenticated B's user but returned A's company context. Full cross-tenant access confirmed in both directions.</p>
+                </div>
+
+                <div class="chain-step">
+                    <span class="step-num">3</span>
+                    <p><strong>Company ID enumeration:</strong> The platform had a public config endpoint that returned feature flags. Buried in the flag conditions were 14 company UUIDs, accessible without any authentication. No brute force needed.</p>
+                </div>
+
+                <div class="chain-step">
+                    <span class="step-num">4</span>
+                    <p><strong>Mass PII access:</strong> Using one of the leaked company IDs, I accessed a tenant with 4,552 employees. The API returned full employment records: names, emails, job titles, birthdates, nationalities, home addresses, salaries, marital status, and contract details.</p>
+                </div>
+
+                <div class="chain-step">
+                    <span class="step-num">5</span>
+                    <p><strong>National IDs via custom fields:</strong> The custom fields endpoint returned 55 fields per employee including national ID numbers, passport numbers, personal emails, work phones, payroll IDs, and government ID fields.</p>
+                </div>
+
+                <div class="chain-step">
+                    <span class="step-num">6</span>
+                    <p><strong>Write access confirmed:</strong> I created a webhook inside the target company's tenant, which returned 201 Created. I also tested offboarding endpoints. The forged token passed auth (returned a validation error for missing fields), while the real token correctly blocked cross-tenant access with "Company not found".</p>
+                </div>
+
+                <h2>Impact</h2>
+                <ul class="impact-list">
+                    <li>Full cross-tenant read access to employee PII: national IDs, salaries, addresses, birthdates</li>
+                    <li>Write access confirmed: webhook creation and offboarding endpoints passed auth</li>
+                    <li>5,073 employees accessed across 5 companies during testing</li>
+                    <li>Company IDs leaked via unauthenticated endpoint, making targeting trivial</li>
+                </ul>
+
+                <h2>Timeline</h2>
+                <p>Reported and triaged within a day. Initially rated High because the team assumed company UUIDs required org membership to obtain. After pointing out the unauthenticated config endpoint leaking company IDs, severity was upgraded to Critical (9.6) with an additional bounty. Fix was deployed shortly after.</p>
+
+                <div class="moral-box">
+                    <h3>Takeaway</h3>
+                    <p>Never trust client-supplied identifiers for tenant context. If a token embeds a company ID, the server must resolve the tenant from the token's database record, not from the string itself. This is the same class of bug as IDOR but at the tenant isolation layer, which makes the blast radius much larger. Also worth checking: any unauthenticated endpoint that might leak internal identifiers. In this case, a feature flag config endpoint gave away 14 company UUIDs for free.</p>
+                </div>
+
+                <a href="../blog/" class="back-button">&larr; Back to Blog</a>
+
             </div>
         </section>
     </main>
@@ -359,7 +347,6 @@
         </div>
     </footer>
 
-    <!-- Scroll to Top -->
     <button class="scroll-top" aria-label="Scroll to top">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
     </button>
