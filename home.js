@@ -13,7 +13,7 @@
             var tag = card.querySelector('.blog-tag');
             var el = document.getElementById('latest-finding-card');
             if (!el || !title) return;
-            if (href) el.href = href.replace('../', './');
+            if (href) el.href = href.split('../').join('./');
             document.getElementById('lf-title').textContent = title.textContent;
             if (excerpt) document.getElementById('lf-excerpt').textContent = excerpt.textContent;
             var tagsEl = document.getElementById('lf-tags');

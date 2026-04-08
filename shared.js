@@ -36,12 +36,17 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // --- Email Assembly (anti-harvesting) ---
+    var _eu = 'naar0ony', _ed = 'gmail.com', _em = _eu + '@' + _ed;
+    var emailLinks = document.querySelectorAll('a[data-email]');
+    emailLinks.forEach(function (el) { el.href = 'mailto:' + _em; });
+
     // --- Email Button Clipboard ---
     var emailButton = document.querySelector('.email-button');
     if (emailButton) {
         var emailOriginalNodes = Array.prototype.slice.call(emailButton.childNodes).map(function (n) { return n.cloneNode(true); });
         emailButton.addEventListener('click', function () {
-            navigator.clipboard.writeText('naar0ony@gmail.com').then(function () {
+            navigator.clipboard.writeText(_em).then(function () {
                 emailButton.textContent = 'Copied!';
                 setTimeout(function () {
                     emailButton.textContent = '';
