@@ -8,13 +8,13 @@
     <meta name="description" content="Rony - Security Researcher & Bug Hunter. Finding vulnerabilities in the world's largest tech platforms.">
     <meta name="theme-color" content="#0f0f0f">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;">
     <link rel="icon" href="/image/upside_bar_icon.png" type="image/png">
     <meta property="og:title" content="Rony - Security Researcher">
     <meta property="og:description" content="Security researcher specializing in web application and API security testing.">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://alymagdi.com/image/home.ico">
-    <script>(function(){var t=localStorage.getItem('theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');if(window.top===window.self)document.documentElement.style.setProperty('display','block','important');})();</script>
+    <script src="/theme-init.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -604,77 +604,7 @@
     </button>
 
     <script src="shared.js"></script>
-    <script>
-        // Latest finding teaser — dynamically update from blog listing
-        (function() {
-            fetch('/blog/')
-                .then(function(r) { return r.text(); })
-                .then(function(html) {
-                    var doc = new DOMParser().parseFromString(html, 'text/html');
-                    var card = doc.querySelector('.blog-card');
-                    if (!card) return;
-                    var href = card.getAttribute('href');
-                    var title = card.querySelector('h3');
-                    var excerpt = card.querySelector('p');
-                    var date = card.querySelector('.blog-date');
-                    var tag = card.querySelector('.blog-tag');
-                    var el = document.getElementById('latest-finding-card');
-                    if (!el || !title) return;
-                    // Fix relative href: ../blog-x/ → ./blog-x/
-                    if (href) el.href = href.replace('../', './');
-                    document.getElementById('lf-title').textContent = title.textContent;
-                    if (excerpt) document.getElementById('lf-excerpt').textContent = excerpt.textContent;
-                    var tagsEl = document.getElementById('lf-tags');
-                    tagsEl.innerHTML = '';
-                    if (date) { var d = document.createElement('span'); d.className = 'latest-finding-tag'; d.textContent = date.textContent; tagsEl.appendChild(d); }
-                    if (tag) { var t = document.createElement('span'); t.className = 'latest-finding-tag'; t.textContent = tag.textContent; tagsEl.appendChild(t); }
-                })
-                .catch(function() {});
-        })();
-
-        // Terminal typing effect
-        document.addEventListener('DOMContentLoaded', function () {
-            var output = document.getElementById('typed-output');
-            var cursor = document.querySelector('.terminal-cursor');
-            if (!output) return;
-
-            var text = 'whoami --security-researcher';
-            var i = 0;
-
-            function typeChar() {
-                if (i < text.length) {
-                    output.textContent += text.charAt(i);
-                    i++;
-                    setTimeout(typeChar, 60 + Math.random() * 40);
-                } else {
-                    setTimeout(function () {
-                        cursor.classList.add('done');
-                    }, 2000);
-                }
-            }
-
-            setTimeout(typeChar, 500);
-        });
-
-        // Spotlight effect for image
-        var aboutImage = document.querySelector('.about-image');
-        if (aboutImage) {
-            var spotlight = document.createElement('div');
-            spotlight.classList.add('spotlight');
-            aboutImage.appendChild(spotlight);
-
-            aboutImage.addEventListener('mousemove', function (e) {
-                var rect = aboutImage.getBoundingClientRect();
-                spotlight.style.left = (e.clientX - rect.left) + 'px';
-                spotlight.style.top = (e.clientY - rect.top) + 'px';
-                spotlight.style.opacity = '1';
-            });
-
-            aboutImage.addEventListener('mouseleave', function () {
-                spotlight.style.opacity = '0';
-            });
-        }
-    </script>
+    <script src="home.js"></script>
 </body>
 
 </html>
