@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mass Parameter Injection into Internal Transaction API via BFF - Rony</title>
+    <meta name="description" content="How a BFF endpoint blindly forwarded all user-supplied JSON fields to an internal transaction API, enabling parameter injection and leaking internal JWTs.">
+    <meta name="theme-color" content="#0f0f0f">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+    <link rel="icon" href="/image/upside_bar_icon.png" type="image/png">
+    <script>(function(){var t=localStorage.getItem('theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');if(window.top===window.self)document.documentElement.style.setProperty('display','block','important');})();</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../shared.css">
+    <style>
+        .post-hero {
+            padding: 120px 0 40px;
+        }
+
+        @media (max-width: 809px) {
+            .post-hero { padding: 64px 0 20px; }
+        }
+
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .post-date {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .severity-tag {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tag-high {
+            background-color: rgba(255, 85, 0, 0.15);
+            color: #ff5500;
+        }
+
+        .post-hero h1 {
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            line-height: 1.2;
+            margin-bottom: 12px;
+        }
+
+        @media (max-width: 809px) {
+            .post-hero h1 { font-size: 26px; }
+        }
+
+        .post-hero .subtitle {
+            color: var(--text-secondary);
+            font-size: 17px;
+            line-height: 28px;
+        }
+
+        .post-body {
+            padding: 20px 0 80px;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .post-body h2 {
+            font-size: 22px;
+            font-weight: 600;
+            margin: 40px 0 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .post-body h2:first-child {
+            margin-top: 0;
+        }
+
+        .post-body p {
+            color: var(--text-secondary);
+            font-size: 16px;
+            line-height: 28px;
+            margin-bottom: 16px;
+        }
+
+        .post-body ul, .post-body ol {
+            color: var(--text-secondary);
+            font-size: 16px;
+            line-height: 28px;
+            margin-bottom: 16px;
+            padding-left: 24px;
+        }
+
+        .post-body li {
+            margin-bottom: 6px;
+        }
+
+        .post-body code {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            background-color: var(--border-color);
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: var(--accent-color);
+        }
+
+        .post-body pre {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px 20px;
+            overflow-x: auto;
+            margin-bottom: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 22px;
+            color: var(--text-secondary);
+        }
+
+        .post-body pre code {
+            background: none;
+            padding: 0;
+            font-size: 13px;
+        }
+
+        .chain-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .chain-step .step-num {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: rgba(255, 85, 0, 0.12);
+            color: var(--accent-color);
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chain-step p {
+            margin-bottom: 0;
+        }
+
+        .moral-box {
+            background-color: var(--card-bg);
+            border-left: 3px solid var(--accent-color);
+            border-radius: 0 8px 8px 0;
+            padding: 20px 24px;
+            margin: 32px 0;
+        }
+
+        .moral-box h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--accent-color);
+        }
+
+        .moral-box p {
+            margin-bottom: 0;
+        }
+
+        .impact-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .impact-list li {
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .impact-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 11px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #ff5500;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-container">
+            <a href="../" class="logo">
+                <img src="/image/upside_bar_icon.png" alt="Rony's Logo">
+            </a>
+
+            <div class="menu-toggle" aria-label="Menu" role="button" tabindex="0">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <div class="nav-items">
+                <a href="../about/" class="nav-link">About</a>
+                <a href="../blog/" class="nav-link">Blog</a>
+                <a href="../work/" class="nav-link">Work</a>
+
+                <button class="theme-toggle" aria-label="Toggle theme">
+                    <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+
+                <button class="email-button">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12.5 3.5H3.5C2.94772 3.5 2.5 3.94772 2.5 4.5V11.5C2.5 12.0523 2.94772 12.5 3.5 12.5H12.5C13.0523 12.5 13.5 12.0523 13.5 11.5V4.5C13.5 3.94772 13.0523 3.5 12.5 3.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2.5 4.5L8 8.5L13.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    E-Mail
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main style="padding-top: 64px;">
+        <section class="post-hero hero">
+            <div class="container">
+                <div class="hero-bg-grid" aria-hidden="true"></div>
+                <div class="section" style="position: relative; z-index: 1;">
+                    <div class="post-meta">
+                        <span class="post-date">April 2026</span>
+                        <span class="severity-tag tag-high">High</span>
+                    </div>
+                    <h1 class="animate-on-load">Mass Parameter Injection into Internal Transaction API via BFF</h1>
+                    <p class="subtitle animate-on-load">How a Backend-For-Frontend endpoint blindly forwarded all user-supplied fields to an internal transaction service, leaking internal JWTs and enabling parameter injection.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="post-body">
+            <div class="container">
+
+                <h2>The Target</h2>
+                <p>A large online marketplace platform with multiple regional sites sharing the same codebase. The platform has a "make offer" feature for second-hand items where buyers submit an offer amount through a BFF (Backend-For-Frontend) layer that proxies requests to an internal transaction service.</p>
+
+                <h2>The Discovery</h2>
+                <p>I started by sending a normal offer request with just the expected fields: an item ID and an amount. The request went through, but the error response was unusually verbose. It included the full internal request that the BFF forwarded to the downstream service, including the Authorization header with a fresh internal JWT token, the internal Kubernetes service URL, and a Node.js stack trace with file paths.</p>
+                <p>That was already a finding on its own. But the interesting part was in the forwarded request body. The BFF was taking the entire user-supplied JSON and passing it straight through to the internal API, only appending a <code>client</code> field. No filtering, no whitelist.</p>
+
+                <h2>The Attack</h2>
+
+                <div class="chain-step">
+                    <span class="step-num">1</span>
+                    <p><strong>Parameter injection:</strong> I added extra fields to the request body: <code>sellerId</code>, <code>buyerId</code>, <code>status</code>, <code>paymentMethod</code>, <code>shippingCost</code>. The error response confirmed every single injected field was forwarded to the internal transaction API. The <code>status</code> was set to "COMPLETED", <code>paymentMethod</code> to "FREE", and <code>shippingCost</code> to -100.</p>
+                </div>
+
+                <div class="chain-step">
+                    <span class="step-num">2</span>
+                    <p><strong>Internal JWT leak:</strong> Every request to the BFF leaked a fresh RS256-signed JWT in the error response. Decoding it revealed the internal Kubernetes service name used as the issuer, the user's internal login ID, session ID, and other identifiers. A new token was generated on every call.</p>
+                </div>
+
+                <div class="chain-step">
+                    <span class="step-num">3</span>
+                    <p><strong>Infrastructure disclosure:</strong> The error also leaked the internal service URL where transactions are initialized, the Kubernetes namespace structure, and full Node.js stack traces with dependency paths.</p>
+                </div>
+
+                <div class="chain-step">
+                    <span class="step-num">4</span>
+                    <p><strong>Cross-platform confirmation:</strong> The same vulnerability existed on the platform's regional sister site. Different JWT (different signing key), same BFF code, same parameter forwarding behavior. Both sites shared the same internal transaction service.</p>
+                </div>
+
+                <h2>Impact</h2>
+                <ul class="impact-list">
+                    <li>Attacker-controlled fields (sellerId, buyerId, status, paymentMethod, shippingCost) forwarded to internal transaction API via trusted internal JWT</li>
+                    <li>Fresh internal RS256 JWT leaked on every request, containing user identifiers and session data</li>
+                    <li>Internal Kubernetes service names and Node.js stack traces exposed</li>
+                    <li>Confirmed on two regional platforms sharing the same BFF codebase</li>
+                </ul>
+
+                <h2>Timeline</h2>
+                <p>Reported with full reproduction steps across both platforms. Awaiting triage.</p>
+
+                <div class="moral-box">
+                    <h3>Takeaway</h3>
+                    <p>BFF layers are a common source of parameter injection bugs. They sit between the client and internal services, and developers often forward the request body as-is, trusting that the internal API will validate it. The fix is simple: whitelist the fields you expect and reject everything else before forwarding. Also, never return internal error details to the client. In this case, the verbose error response was what revealed the entire attack surface, including the internal JWT, service URLs, and proof that injected parameters were reaching the downstream API.</p>
+                </div>
+
+                <a href="../blog/" class="back-button">&larr; Back to Blog</a>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-nav">
+                    <a href="../" class="footer-link">Home</a>
+                    <a href="../about/" class="footer-link">About</a>
+                    <a href="../blog/" class="footer-link">Blog</a>
+                    <a href="../work/" class="footer-link">Work</a>
+                </div>
+                <div class="footer-social">
+                    <a href="https://github.com/AlyMagdi" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="GitHub">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    </a>
+                    <a href="https://hackerone.com/na-rony" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="HackerOne">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.207 0c-.4836 0-.8774.1018-1.1823.3055-.3044.2032-.4568.4752-.4568.816v22.1566c0 .3413.1524.6133.4568.816.3049.2037.6987.3055 1.1823.3055.4836 0 .878-.1018 1.1823-.3055.3049-.2027.4574-.4747.4574-.816V.3055c0-.3408-.1525-.6128-.4574-.816C8.085.1018 7.6912 0 7.207 0zm9.5765 7.3562c-.4836 0-.878.1018-1.1823.3055-.3049.2032-.4574.4752-.4574.816v7.8889c0 .3413.1525.6133.4574.816.3043.2037.6987.3055 1.1823.3055.4841 0 .878-.1018 1.1828-.3055.3044-.2027.4569-.4747.4569-.816V8.4777c0-.3408-.1525-.6128-.4569-.816-.3048-.2037-.6987-.3055-1.1828-.3055z"/></svg>
+                    </a>
+                    <a href="https://medium.com/@naar0ony" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="Medium">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75S24 8.83 24 12z"/></svg>
+                    </a>
+                    <a href="https://www.linkedin.com/in/aly-magdi-92806a392/" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="LinkedIn">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    </a>
+                    <a href="mailto:naar0ony@gmail.com" class="footer-social-link" aria-label="Email">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12.713l-11.985-9.713h23.97l-11.985 9.713zm0 2.574l-12-9.725v15.438h24v-15.438l-12 9.725z"/></svg>
+                    </a>
+                </div>
+                <p class="footer-copy">&copy; <span id="footer-year"></span> Rony. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <button class="scroll-top" aria-label="Scroll to top">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </button>
+
+    <script src="../shared.js"></script>
+</body>
+
+</html>
