@@ -291,7 +291,7 @@
                     <a href="../blog-parameter-injection-bff/" class="blog-card section">
                         <div class="blog-card-header">
                             <span class="blog-date">April 2026</span>
-                            <span class="blog-tag tag-high">High</span>
+                            <span class="blog-tag tag-critical">Critical</span>
                         </div>
                         <h3>Mass Parameter Injection into Internal Transaction API via BFF</h3>
                         <p>A BFF endpoint blindly forwarded all user-supplied JSON fields to an internal transaction service, enabling injection of sellerId, status, and paymentMethod while leaking internal JWTs on every call.</p>
@@ -343,7 +343,35 @@
                         </div>
                     </a>
 
-                    <!-- Blog Post 6: SSRF to RCE -->
+                    <!-- Blog Post 6: v1 Scope Bypass -->
+                    <a href="../blog-v1-scope-bypass/" class="blog-card section">
+                        <div class="blog-card-header">
+                            <span class="blog-date">March 2026</span>
+                            <span class="blog-tag tag-medium">Medium</span>
+                        </div>
+                        <h3>v1 API Accessible with v2 Tokens: Full CRUD Without Scope Enforcement</h3>
+                        <p>v2 API tokens could access legacy v1 endpoints with zero scope checks, enabling full CRUD operations and bypassing role-based restrictions that the v2 API enforces.</p>
+                        <div class="blog-card-footer">
+                            <span class="blog-platform">Write-Up</span>
+                            <span class="read-more">Read more →</span>
+                        </div>
+                    </a>
+
+                    <!-- Blog Post 7: Refresh Token Bypass -->
+                    <a href="../blog-refresh-token-bypass/" class="blog-card section">
+                        <div class="blog-card-header">
+                            <span class="blog-date">March 2026</span>
+                            <span class="blog-tag tag-medium">Medium</span>
+                        </div>
+                        <h3>Refresh Token Accepted as Access Token on All Endpoints</h3>
+                        <p>A telehealth platform accepted refresh tokens on all resource endpoints including PHI, doubling the session lifetime from 8 to 16 hours with full read and write access.</p>
+                        <div class="blog-card-footer">
+                            <span class="blog-platform">Write-Up</span>
+                            <span class="read-more">Read more →</span>
+                        </div>
+                    </a>
+
+                    <!-- Blog Post 8: SSRF to RCE -->
                     <a href="../blog-ssrf-to-rce/" class="blog-card section">
                         <div class="blog-card-header">
                             <span class="blog-date">February 2026</span>
@@ -357,7 +385,7 @@
                         </div>
                     </a>
 
-                    <!-- Blog Post 7: Dependency Confusion -->
+                    <!-- Blog Post 9: Dependency Confusion -->
                     <a href="../blog-dependency-confusion/" class="blog-card section">
                         <div class="blog-card-header">
                             <span class="blog-date">July 2025</span>
