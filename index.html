@@ -518,15 +518,18 @@
 
             <!-- Latest Finding Teaser -->
             <div class="latest-finding-wrapper">
-                <a href="" class="latest-finding-card section" id="latest-finding-card" style="display:none;">
+                <a href="./blog-cross-tenant-token/" class="latest-finding-card section" id="latest-finding-card">
                     <div class="latest-finding-label">
                         <span class="latest-finding-dot"></span>
                         <span>Latest finding</span>
                     </div>
-                    <div class="latest-finding-title" id="lf-title"></div>
-                    <div class="latest-finding-excerpt" id="lf-excerpt"></div>
+                    <div class="latest-finding-title" id="lf-title">Cross-Tenant Data Access via API Token Prefix Trust</div>
+                    <div class="latest-finding-excerpt" id="lf-excerpt">A flawed token parsing mechanism trusted the company ID embedded in the token string instead of resolving it from the database, giving full read and write access across tenant boundaries on a global HR platform.</div>
                     <div class="latest-finding-footer">
-                        <div class="latest-finding-tags" id="lf-tags"></div>
+                        <div class="latest-finding-tags" id="lf-tags">
+                            <span class="latest-finding-tag">April 2026</span>
+                            <span class="latest-finding-tag">Critical</span>
+                        </div>
                         <span class="latest-finding-more">Read more &rarr;</span>
                     </div>
                     <div class="latest-finding-bar"></div>
@@ -574,7 +577,7 @@
 
     <script src="shared.js"></script>
     <script>
-        // Latest finding teaser
+        // Latest finding teaser — dynamically update from blog listing
         (function() {
             fetch('/blog/')
                 .then(function(r) { return r.text(); })
@@ -589,13 +592,14 @@
                     var tag = card.querySelector('.blog-tag');
                     var el = document.getElementById('latest-finding-card');
                     if (!el || !title) return;
-                    el.href = href || './blog/';
+                    // Fix relative href: ../blog-x/ → ./blog-x/
+                    if (href) el.href = href.replace('../', './');
                     document.getElementById('lf-title').textContent = title.textContent;
                     if (excerpt) document.getElementById('lf-excerpt').textContent = excerpt.textContent;
                     var tagsEl = document.getElementById('lf-tags');
+                    tagsEl.innerHTML = '';
                     if (date) { var d = document.createElement('span'); d.className = 'latest-finding-tag'; d.textContent = date.textContent; tagsEl.appendChild(d); }
                     if (tag) { var t = document.createElement('span'); t.className = 'latest-finding-tag'; t.textContent = tag.textContent; tagsEl.appendChild(t); }
-                    el.style.display = '';
                 })
                 .catch(function() {});
         })();
