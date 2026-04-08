@@ -282,6 +282,123 @@
                 height: 70px;
             }
         }
+
+        /* Latest Finding Teaser */
+        .latest-finding-wrapper {
+            display: flex;
+            justify-content: flex-end;
+            padding: 40px 0 0;
+        }
+
+        @media (max-width: 809px) {
+            .latest-finding-wrapper {
+                justify-content: center;
+            }
+        }
+
+        .latest-finding-card {
+            background: #1A1A1A;
+            border: 1px solid rgba(255,120,50,0.35);
+            border-radius: 12px;
+            max-width: 420px;
+            width: 100%;
+            padding: 20px 22px 0;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: block;
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .latest-finding-card:hover {
+            border-color: rgba(255,120,50,0.6);
+            transform: translateY(-2px);
+        }
+
+        .latest-finding-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .latest-finding-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #E85A30;
+            animation: lfPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes lfPulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(232,90,48,0.4); }
+            50% { opacity: 0.6; box-shadow: 0 0 0 4px rgba(232,90,48,0); }
+        }
+
+        .latest-finding-label span {
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #E85A30;
+        }
+
+        .latest-finding-title {
+            font-size: 17px;
+            font-weight: 500;
+            color: #F0F0F0;
+            line-height: 1.35;
+            margin-bottom: 6px;
+        }
+
+        .latest-finding-excerpt {
+            font-size: 13px;
+            color: #999;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 14px;
+        }
+
+        .latest-finding-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .latest-finding-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .latest-finding-tag {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+            background: rgba(232,90,48,0.15);
+            color: #E85A30;
+        }
+
+        .latest-finding-more {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #666;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .latest-finding-bar {
+            height: 3px;
+            background: linear-gradient(to right, #E85A30, transparent);
+            border-radius: 0 0 12px 12px;
+            margin: 0 -22px;
+        }
     </style>
 </head>
 
@@ -398,6 +515,23 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Latest Finding Teaser -->
+            <div class="latest-finding-wrapper">
+                <a href="" class="latest-finding-card section" id="latest-finding-card" style="display:none;">
+                    <div class="latest-finding-label">
+                        <span class="latest-finding-dot"></span>
+                        <span>Latest finding</span>
+                    </div>
+                    <div class="latest-finding-title" id="lf-title"></div>
+                    <div class="latest-finding-excerpt" id="lf-excerpt"></div>
+                    <div class="latest-finding-footer">
+                        <div class="latest-finding-tags" id="lf-tags"></div>
+                        <span class="latest-finding-more">Read more &rarr;</span>
+                    </div>
+                    <div class="latest-finding-bar"></div>
+                </a>
+            </div>
         </section>
     </main>
 
@@ -440,6 +574,32 @@
 
     <script src="shared.js"></script>
     <script>
+        // Latest finding teaser
+        (function() {
+            fetch('/blog/')
+                .then(function(r) { return r.text(); })
+                .then(function(html) {
+                    var doc = new DOMParser().parseFromString(html, 'text/html');
+                    var card = doc.querySelector('.blog-card');
+                    if (!card) return;
+                    var href = card.getAttribute('href');
+                    var title = card.querySelector('h3');
+                    var excerpt = card.querySelector('p');
+                    var date = card.querySelector('.blog-date');
+                    var tag = card.querySelector('.blog-tag');
+                    var el = document.getElementById('latest-finding-card');
+                    if (!el || !title) return;
+                    el.href = href || './blog/';
+                    document.getElementById('lf-title').textContent = title.textContent;
+                    if (excerpt) document.getElementById('lf-excerpt').textContent = excerpt.textContent;
+                    var tagsEl = document.getElementById('lf-tags');
+                    if (date) { var d = document.createElement('span'); d.className = 'latest-finding-tag'; d.textContent = date.textContent; tagsEl.appendChild(d); }
+                    if (tag) { var t = document.createElement('span'); t.className = 'latest-finding-tag'; t.textContent = tag.textContent; tagsEl.appendChild(t); }
+                    el.style.display = '';
+                })
+                .catch(function() {});
+        })();
+
         // Terminal typing effect
         document.addEventListener('DOMContentLoaded', function () {
             var output = document.getElementById('typed-output');
