@@ -467,6 +467,24 @@
                             <span> Vulnerabilities</span>
                         </h2>
                         <p class="animate-on-load">I'm <span>Rony</span>, a security researcher at HackerOne and BugCrowd, working in web and application security, skilled at finding vulnerabilities in web apps, APIs, and infrastructure.</p>
+
+                        <!-- Latest Finding Teaser -->
+                        <a href="./blog-cross-tenant-token/" class="latest-finding-card section" id="latest-finding-card" style="margin-top: 24px;">
+                            <div class="latest-finding-label">
+                                <span class="latest-finding-dot"></span>
+                                <span>Latest finding</span>
+                            </div>
+                            <div class="latest-finding-title" id="lf-title">Cross-Tenant Data Access via API Token Prefix Trust</div>
+                            <div class="latest-finding-excerpt" id="lf-excerpt">A flawed token parsing mechanism trusted the company ID embedded in the token string instead of resolving it from the database, giving full read and write access across tenant boundaries on a global HR platform.</div>
+                            <div class="latest-finding-footer">
+                                <div class="latest-finding-tags" id="lf-tags">
+                                    <span class="latest-finding-tag">April 2026</span>
+                                    <span class="latest-finding-tag">Critical</span>
+                                </div>
+                                <span class="latest-finding-more">Read more &rarr;</span>
+                            </div>
+                            <div class="latest-finding-bar"></div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -515,26 +533,6 @@
                     </div>
                 </div>
             </section>
-
-            <!-- Latest Finding Teaser -->
-            <div class="latest-finding-wrapper">
-                <a href="./blog-cross-tenant-token/" class="latest-finding-card section" id="latest-finding-card">
-                    <div class="latest-finding-label">
-                        <span class="latest-finding-dot"></span>
-                        <span>Latest finding</span>
-                    </div>
-                    <div class="latest-finding-title" id="lf-title">Cross-Tenant Data Access via API Token Prefix Trust</div>
-                    <div class="latest-finding-excerpt" id="lf-excerpt">A flawed token parsing mechanism trusted the company ID embedded in the token string instead of resolving it from the database, giving full read and write access across tenant boundaries on a global HR platform.</div>
-                    <div class="latest-finding-footer">
-                        <div class="latest-finding-tags" id="lf-tags">
-                            <span class="latest-finding-tag">April 2026</span>
-                            <span class="latest-finding-tag">Critical</span>
-                        </div>
-                        <span class="latest-finding-more">Read more &rarr;</span>
-                    </div>
-                    <div class="latest-finding-bar"></div>
-                </a>
-            </div>
         </section>
     </main>
 
