@@ -297,7 +297,7 @@
         }
 
         .latest-finding-card {
-            background: rgba(26, 26, 26, 0.4);
+            background: var(--card-bg-alpha);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255,120,50,0.35);
@@ -377,14 +377,14 @@
         .latest-finding-title {
             font-size: 18px;
             font-weight: 500;
-            color: #F0F0F0;
+            color: var(--text-primary);
             line-height: 1.35;
             margin-bottom: 6px;
         }
 
         .latest-finding-excerpt {
             font-size: 14px;
-            color: #999;
+            color: var(--text-secondary);
             line-height: 1.5;
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -418,7 +418,7 @@
         .latest-finding-more {
             font-family: 'Courier New', monospace;
             font-size: 12px;
-            color: #666;
+            color: var(--text-secondary);
             white-space: nowrap;
             flex-shrink: 0;
         }
